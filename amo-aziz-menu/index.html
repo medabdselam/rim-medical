@@ -60,6 +60,21 @@
     </div>
   </section>
 
+  <div class="wrap">
+    <section class="chef">
+      <img class="chef__img" src="assets/brand/chef-head-400.webp"
+           srcset="assets/brand/chef-head-200.webp 200w,
+                   assets/brand/chef-head-400.webp 400w,
+                   assets/brand/chef-head-600.webp 600w"
+           sizes="(min-width:620px) 132px, 96px"
+           alt="" width="400" height="400" fetchpriority="high">
+      <div class="chef__txt">
+        <h2 id="chefTitle"></h2>
+        <p id="chefBody"></p>
+      </div>
+    </section>
+  </div>
+
   <div class="controls">
     <div class="wrap">
       <div class="search">
@@ -73,17 +88,6 @@
 
   <div class="wrap">
     <div id="menu"></div>
-
-    <section class="chef">
-      <img src="assets/brand/chef-portrait-600.webp"
-           srcset="assets/brand/chef-portrait-600.webp 600w, assets/brand/chef-portrait-900.webp 900w"
-           sizes="(min-width:720px) 220px, 100vw"
-           alt="" width="1122" height="1402" loading="lazy">
-      <div>
-        <h3 id="chefTitle"></h3>
-        <p id="chefBody"></p>
-      </div>
-    </section>
 
     <section class="info" aria-labelledby="infoTitle">
       <h2 class="visually-hidden" id="infoTitle"></h2>
@@ -104,10 +108,6 @@
         <div class="info__pay" id="payValue"></div>
       </div>
     </section>
-
-    <p style="text-align:center">
-      <button type="button" class="btn btn--ghost" id="printBtn"></button>
-    </p>
   </div>
 </main>
 
