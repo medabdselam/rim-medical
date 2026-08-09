@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مطعم عمو عزيز — قائمة الطعام | Restaurant Amo Aziz</title>
+<meta name="description" content="قائمة طعام مطعم عمو عزيز: مناقيش ومخبوزات، أطباق رئيسية، وبيتزا. الأسعار بالأوقية الجديدة. الطلب عبر واتساب.">
+<meta name="theme-color" content="#101215">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="مطعم عمو عزيز — قائمة الطعام">
+<meta property="og:description" content="للأكل الطيب والطعم الأصيل — زيارة واحدة تكفي لتكون زبون دائم.">
+<meta property="og:image" content="assets/brand/storefront-hero-1400.webp">
+
+<link rel="icon" href="assets/brand/app-icon-180.png">
+<link rel="apple-touch-icon" href="assets/brand/app-icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<link rel="preload" href="assets/fonts/plexar-arabic-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plexar-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+<a class="skip" id="skip" href="#menu">تخطَّ إلى القائمة</a>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <div class="brand">
+      <img src="assets/brand/logo-mark-light-256.png" alt="" width="40" height="21">
+      <div class="brand__txt">
+        <div class="brand__name" id="brandName">مطعم عمو عزيز</div>
+        <div class="brand__sub" id="brandSub"></div>
+      </div>
+    </div>
+    <nav class="langs" id="langs" aria-label="اللغة"></nav>
+    <span class="visually-hidden" id="langLabel"></span>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero__media">
+      <img src="assets/brand/storefront-hero-1400.webp"
+           srcset="assets/brand/storefront-hero-800.webp 800w,
+                   assets/brand/storefront-hero-1400.webp 1400w,
+                   assets/brand/storefront-hero-1920.webp 1920w"
+           sizes="100vw" alt="" width="1122" height="561" fetchpriority="high">
+    </div>
+    <div class="wrap hero__body">
+      <img class="hero__logo" src="assets/brand/logo-mark-light-512.png" alt="" width="92" height="48">
+      <h1 id="heroName">مطعم عمو عزيز</h1>
+      <div class="hero__latin" id="heroLatin">Restaurant Amo Aziz</div>
+      <p class="hero__tag" id="heroTag"></p>
+      <div class="hero__promise" id="heroPromise"></div>
+      <div class="hero__cta">
+        <a class="btn btn--wa" id="ctaOrder" target="_blank" rel="noopener" href="#"></a>
+        <a class="btn btn--ghost" id="ctaMenu" href="#menu"></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="wrap">
+      <div class="search">
+        <span id="searchIcon" aria-hidden="true"></span>
+        <input type="search" id="search" autocomplete="off" enterkeyhint="search">
+        <button type="button" class="search__clear" id="searchClear" hidden>&times;</button>
+      </div>
+      <div class="tabs" id="tabs" role="group"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div id="menu"></div>
+
+    <section class="chef">
+      <img src="assets/brand/chef-portrait-600.webp"
+           srcset="assets/brand/chef-portrait-600.webp 600w, assets/brand/chef-portrait-900.webp 900w"
+           sizes="(min-width:720px) 220px, 100vw"
+           alt="" width="1122" height="1402" loading="lazy">
+      <div>
+        <h3 id="chefTitle"></h3>
+        <p id="chefBody"></p>
+      </div>
+    </section>
+
+    <section class="info" aria-labelledby="infoTitle">
+      <h2 class="visually-hidden" id="infoTitle"></h2>
+      <div class="info__card">
+        <h4 id="addrLabel"></h4>
+        <p id="addrValue"></p>
+      </div>
+      <div class="info__card">
+        <h4 id="ordersLabel"></h4>
+        <p id="ordersValue"></p>
+      </div>
+      <div class="info__card">
+        <h4 id="feedbackLabel"></h4>
+        <p id="feedbackValue"></p>
+      </div>
+      <div class="info__card">
+        <h4 id="payLabel"></h4>
+        <div class="info__pay" id="payValue"></div>
+      </div>
+    </section>
+
+    <p style="text-align:center">
+      <button type="button" class="btn btn--ghost" id="printBtn"></button>
+    </p>
+  </div>
+</main>
+
+<footer class="footer">
+  <img src="assets/brand/logo-mark-light-256.png" alt="" width="56" height="29">
+  <div id="footName"></div>
+</footer>
+
+<div class="orderbar">
+  <a class="btn btn--wa" id="barOrder" target="_blank" rel="noopener" href="#"></a>
+</div>
+
+<dialog class="modal" id="dish" aria-label="تفاصيل الطبق"></dialog>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+{
+  "$schema": "./menu.schema.md",
+  "_note": "المصدر الوحيد للأصناف والأسعار. عدّل هنا فقط — لا تلمس الكود. راجع SOURCES.md لمعرفة مصدر كل قيمة.",
+
+  "restaurant": {
+    "name":  { "ar": "مطعم عمو عزيز", "fr": "Restaurant Amo Aziz", "en": "Amo Aziz Restaurant" },
+    "shortName": { "ar": "عمو عزيز", "fr": "Amo Aziz", "en": "Amo Aziz" },
+    "tagline": {
+      "ar": "للأكل الطيب والطعم الأصيل",
+      "fr": "Pour une cuisine généreuse et un goût authentique",
+      "en": "Good food, authentic taste"
+    },
+    "promise": {
+      "ar": "زيارة واحدة تكفي لتكون زبون دائم",
+      "fr": "Une seule visite suffit pour devenir un habitué",
+      "en": "One visit is all it takes to become a regular"
+    },
+    "address": {
+      "ar": "الشارع النازل من طريق نواذيبو للخارجية، ميني ماركت — مقابل صيدلية 28 نوفمبر",
+      "fr": "Rue descendant de la route de Nouadhibou vers les Affaires étrangères, mini-market — face à la Pharmacie 28 Novembre",
+      "en": "The street running down from Nouadhibou Road toward the Foreign Ministry, mini-market — opposite 28 November Pharmacy"
+    },
+    "whatsapp": "44408922",
+    "feedbackPhone": "33474751",
+    "currency": { "ar": "أوقية جديدة", "fr": "MRU", "en": "MRU" },
+    "payments": ["bimbank", "Sedad Bank", "Bankily"],
+    "openingHours": null,
+    "mapUrl": null
+  },
+
+  "_categoryOrder": "أطباق رئيسية ثم بيتزا ثم المخبوزات — الأعلى قيمةً أولاً لتسهيل التصفح ورفع متوسط الطلب.",
+  "categories": [
+    { "id": "mains",  "name": { "ar": "أطباق رئيسية",    "fr": "Plats principaux",       "en": "Main Dishes" } },
+    { "id": "pizza",  "name": { "ar": "بيتزا",            "fr": "Pizzas",                  "en": "Pizza" } },
+    { "id": "bakery", "name": { "ar": "مناقيش ومخبوزات", "fr": "Manakich & boulangerie", "en": "Manakish & Bakery" } }
+  ],
+
+  "dishes": [
+    {
+      "id": "rice-kabab-fries", "category": "mains", "price": 300, "image": "rice-kabab-fries",
+      "name": { "ar": "رز وكباب وفريت", "fr": "Riz, kebab et frites", "en": "Rice, Kebab & Fries" },
+      "desc": {
+        "ar": "أسياخ كباب مشوية على رز أبيض، مع بطاطس مقلية وصلصة بيضاء جانبية.",
+        "fr": "Brochettes de kebab grillées sur riz blanc, avec frites et sauce blanche à part.",
+        "en": "Grilled kebab skewers over white rice, with fries and white sauce on the side."
+      },
+      "source": "ملصق — رز وكباب وفريت بسعر 300 اوقيه جديده"
+    },
+    {
+      "id": "pizza-stuffed-crust", "category": "pizza", "price": 300, "image": "pizza-stuffed-crust",
+      "name": { "ar": "بيتزا محشية الأطراف", "fr": "Pizza à croûte fourrée", "en": "Stuffed Crust Pizza" },
+      "desc": {
+        "ar": "بيتزا بأطراف محشوّة بالجبن، مع لحم مفروم وزيتون أسود وفلفل.",
+        "fr": "Pizza à croûte fourrée au fromage, avec viande hachée, olives noires et poivrons.",
+        "en": "Cheese-stuffed crust pizza with minced meat, black olives and peppers."
+      },
+      "nameConflict": "الملف المُولَّد يسمّيها «بيتزا مشكلة الأطراف»؛ الملصق الأصلي والصورة يؤكدان «محشية».",
+      "source": "ملصق — بيتزا محشية الاطراف 300 اوقيه جديدة"
+    },
+    {
+      "id": "pizza", "category": "pizza", "price": 250, "image": "pizza",
+      "name": { "ar": "بيتزا بجميع أنواعها", "fr": "Pizza (toutes variétés)", "en": "Pizza (All Varieties)" },
+      "desc": {
+        "ar": "بيتزا بالجبن واللحم المفروم مع فلفل ملوّن وزيتون وذرة وفطر.",
+        "fr": "Pizza au fromage et viande hachée, poivrons, olives, maïs et champignons.",
+        "en": "Cheese and minced-meat pizza with peppers, olives, corn and mushrooms."
+      },
+      "source": "ملصق — بيتزا بجميع انواعها سعر 250 جديدة"
+    },
+    {
+      "id": "rice-bukhari-chicken", "category": "mains", "price": 200, "image": "rice-bukhari-chicken",
+      "name": { "ar": "رز بخاري دجاج", "fr": "Riz boukhari au poulet", "en": "Bukhari Rice with Chicken" },
+      "desc": {
+        "ar": "رز بخاري بالجزر والزبيب، تعلوه ربع دجاجة مشوية.",
+        "fr": "Riz boukhari aux carottes et raisins secs, surmonté d'un quart de poulet rôti.",
+        "en": "Bukhari rice with carrots and raisins, topped with a roasted quarter chicken."
+      },
+      "source": "ملصق — رز بخاري دجاج بـ 200 اوقيه جديدة"
+    },
+    {
+      "id": "foul-halabi-a", "category": "mains", "price": 200, "image": "foul-halabi-a",
+      "name": { "ar": "فول حلبي", "fr": "Foul d'Alep", "en": "Aleppo Foul" },
+      "desc": {
+        "ar": "فول مع طحينة وزيت، مزيّن بالطماطم والبقدونس وحبّ الرمان.",
+        "fr": "Fèves au tahini et à l'huile, garnies de tomate, persil et grains de grenade.",
+        "en": "Fava beans with tahini and oil, topped with tomato, parsley and pomegranate seeds."
+      },
+      "priceConflict": "يظهر «فول حلبي» في المصدر مرتين بسعرين: 200 و150 أوقية، دون بيان الفرق. الصنفان معروضان كما وردا.",
+      "source": "ملصق — فول حلبي سعر 200 اوقيه جديده"
+    },
+    {
+      "id": "foul-halabi-b", "category": "mains", "price": 150, "image": "foul-halabi-b",
+      "name": { "ar": "فول حلبي", "fr": "Foul d'Alep", "en": "Aleppo Foul" },
+      "desc": {
+        "ar": "فول مقدَّم في علبة سفري، مع اللوز والبقدونس والبهارات.",
+        "fr": "Fèves servies en barquette à emporter, avec amandes, persil et épices.",
+        "en": "Fava beans served in a takeaway tub, with almonds, parsley and spices."
+      },
+      "priceConflict": "يظهر «فول حلبي» في المصدر مرتين بسعرين: 200 و150 أوقية، دون بيان الفرق. الصنفان معروضان كما وردا.",
+      "source": "ملصق — فول حلبي [نص ممسوح] بسعر 150 اوقيه جديده"
+    },
+    {
+      "id": "mansaf-mashawi", "category": "mains", "price": null, "image": "mansaf-mashawi",
+      "priceNote": { "ar": "حسب عدد الأشخاص", "fr": "Selon le nombre de personnes", "en": "Priced by number of guests" },
+      "name": { "ar": "منسف مشويات", "fr": "Mansaf grillades", "en": "Mixed Grill Mansaf" },
+      "desc": {
+        "ar": "صحن كبير للمشاركة: رز مع دجاج وكباب وكبّة وبطاطس مقلية وخضار.",
+        "fr": "Grand plat à partager : riz, poulet, kebab, kebbé, frites et légumes.",
+        "en": "A large sharing platter: rice with chicken, kebab, kibbeh, fries and vegetables."
+      },
+      "source": "ملصق — منسف مشويات حسب عدد الأشخاص (بلا سعر)"
+    },
+    {
+      "id": "rice-bukhari", "category": "mains", "price": 100, "image": "rice-bukhari",
+      "name": { "ar": "الرز البخاري", "fr": "Riz boukhari", "en": "Bukhari Rice" },
+      "desc": {
+        "ar": "رز بخاري بالجزر والزبيب، يُقدَّم في قدر.",
+        "fr": "Riz boukhari aux carottes et raisins secs, servi en marmite.",
+        "en": "Bukhari rice with carrots and raisins, served in the pot."
+      },
+      "source": "ملصق — الرز البخاري بسعر 100 اوقيه جديده"
+    },
+
+    {
+      "id": "toshka", "category": "bakery", "price": 150, "image": "toshka",
+      "name": { "ar": "طوشكا باللحم والفلفل", "fr": "Toshka à la viande et aux poivrons", "en": "Toshka with Meat & Peppers" },
+      "desc": {
+        "ar": "عجينة محشوّة باللحم المفروم والفلفل ومغطّاة بالجبن الذائب.",
+        "fr": "Pâte garnie de viande hachée et de poivrons, recouverte de fromage fondu.",
+        "en": "Dough filled with minced meat and peppers, covered with melted cheese."
+      },
+      "nameConflict": "الملف المُولَّد يسمّيها «شكّا»؛ الملصق الأصلي يقول «طوشكا».",
+      "source": "ملصق — طوشكا باللحم والفلفل بسعر 150 اوقيه جديدة"
+    },
+    {
+      "id": "fatira-kabab-halabi", "category": "bakery", "price": 150, "image": "fatira-kabab-halabi",
+      "name": { "ar": "فطيرة كباب حلبي", "fr": "Fatira au kebab d'Alep", "en": "Aleppo Kebab Fatira" },
+      "desc": {
+        "ar": "فطيرة مطويّة محشوّة بسيخ كباب مع بصل وفلفل أحمر، مع جبن وبطاطس مقلية جانبًا.",
+        "fr": "Fatira pliée garnie d'une brochette de kebab, oignon et poivron rouge, avec fromage et frites à part.",
+        "en": "Folded fatira filled with a kebab skewer, onion and red pepper, with cheese and fries on the side."
+      },
+      "source": "ملصق — فطيرة كباب حلبي بسعر 150 اوقيه جديده"
+    },
+    {
+      "id": "fatira-meat-chicken", "category": "bakery", "price": 150, "image": "fatira-meat-chicken",
+      "name": { "ar": "فطيرة لحم ودجاج", "fr": "Fatira viande et poulet", "en": "Meat & Chicken Fatira" },
+      "desc": {
+        "ar": "فطائر محشوّة باللحم، تُقدَّم مع بطاطس مقلية وصلصة بيضاء.",
+        "fr": "Fatiras garnies de viande, servies avec frites et sauce blanche.",
+        "en": "Meat-filled fatiras, served with fries and white sauce."
+      },
+      "source": "ملصق — فطيرة لحم ودجاج بسعر 150 اوقيه جديده"
+    },
+    {
+      "id": "manakish-zaatar", "category": "bakery", "price": 100, "image": "manakish-zaatar",
+      "name": { "ar": "منقوشة زعتر بالزيت", "fr": "Manouché au zaatar et à l'huile", "en": "Zaatar Manoushe with Oil" },
+      "desc": {
+        "ar": "عجينة رقيقة مدهونة بالزعتر والسمسم والزيت.",
+        "fr": "Pâte fine badigeonnée de zaatar, sésame et huile.",
+        "en": "Thin dough spread with zaatar, sesame and oil."
+      },
+      "source": "ملصق — منقوشة زعتر بالزيت بـ 100 اوقيه جديده"
+    },
+    {
+      "id": "manakish-lahm", "category": "bakery", "price": 100, "image": "manakish-lahm",
+      "name": { "ar": "مناقيش لحم", "fr": "Manakich à la viande", "en": "Meat Manakish" },
+      "desc": {
+        "ar": "مناقيش مغطّاة باللحم المفروم مع الطماطم وحبّ الصنوبر.",
+        "fr": "Manakich à la viande hachée, tomates et pignons de pin.",
+        "en": "Manakish topped with minced meat, tomato and pine nuts."
+      },
+      "source": "ملصق — مناقيش لحم بـ 100 اوقيه جديدة"
+    },
+    {
+      "id": "manakish-filfil", "category": "bakery", "price": 100, "image": "manakish-filfil",
+      "name": { "ar": "مناقيش بالفلفل", "fr": "Manakich aux poivrons", "en": "Manakish with Peppers" },
+      "desc": {
+        "ar": "مناقيش باللحم والفلفل الأحمر والأخضر، مع صلصة بيضاء جانبية.",
+        "fr": "Manakich à la viande, poivrons rouges et verts, avec sauce blanche à part.",
+        "en": "Manakish with meat, red and green peppers, with white sauce on the side."
+      },
+      "source": "ملصق — مناقيش بالفلفل بسعر 100 اوقيه جديده"
+    },
+    {
+      "id": "manakish-jibn", "category": "bakery", "price": 100, "image": "manakish-jibn",
+      "name": { "ar": "مناقيش بالجبن", "fr": "Manakich au fromage", "en": "Cheese Manakish" },
+      "desc": {
+        "ar": "مناقيش مطويّة بالجبن، منثور عليها حبّة البركة.",
+        "fr": "Manakich pliés au fromage, parsemés de nigelle.",
+        "en": "Folded cheese manakish, sprinkled with nigella seeds."
+      },
+      "source": "ملصق — مناقيش بالجبن بسعر 100 اوقيه جديده"
+    },
+    {
+      "id": "falafel-sandwich", "category": "bakery", "price": 100, "image": "falafel-sandwich",
+      "name": { "ar": "ساندويش فلافل", "fr": "Sandwich falafel", "en": "Falafel Sandwich" },
+      "desc": {
+        "ar": "خبز صاج ملفوف على فلافل وخضار مع طحينة ودبس الرمان.",
+        "fr": "Pain saj roulé sur falafel et crudités, tahini et mélasse de grenade.",
+        "en": "Saj bread wrapped around falafel and vegetables, with tahini and pomegranate molasses."
+      },
+      "nameConflict": "الملف المُولَّد يكتبها «ساندوش»؛ الملصق الأصلي «ساندويش».",
+      "source": "ملصق — ساندويش فلافل بـ 100 اوقيه جديدة"
+    },
+    {
+      "id": "kibbeh-mashwiya", "category": "bakery", "price": 50, "image": "kibbeh-mashwiya",
+      "name": { "ar": "كبة مشوية حلبية", "fr": "Kebbé grillé d'Alep", "en": "Aleppo Grilled Kibbeh" },
+      "desc": {
+        "ar": "أقراص كبّة مشوية تُقدَّم مع الزيت وحبّ الرمان.",
+        "fr": "Galettes de kebbé grillées, servies avec huile et grains de grenade.",
+        "en": "Grilled kibbeh patties, served with oil and pomegranate seeds."
+      },
+      "priceUnitUnconfirmed": true,
+      "source": "ملصق — كبه مشوية حلبية السعر 50 اوقيه جديده"
+    },
+    {
+      "id": "sfiha-souriya", "category": "bakery", "price": 20, "image": "sfiha-souriya",
+      "name": { "ar": "صفيحة سورية", "fr": "Sfiha syrienne", "en": "Syrian Sfiha" },
+      "desc": {
+        "ar": "أقراص عجين صغيرة مغطّاة باللحم المفروم المتبّل.",
+        "fr": "Petites galettes de pâte garnies de viande hachée épicée.",
+        "en": "Small dough rounds topped with seasoned minced meat."
+      },
+      "priceUnitUnconfirmed": true,
+      "source": "ملصق — صفيحة سوريه سعر 20 اوقيه جديده"
+    },
+    {
+      "id": "khubz-saj", "category": "bakery", "price": 15, "image": "khubz-saj",
+      "priceNote": { "ar": "للحبة", "fr": "à l'unité", "en": "each" },
+      "name": { "ar": "خبز صاج", "fr": "Pain saj", "en": "Saj Bread" },
+      "desc": {
+        "ar": "رقائق خبز صاج طريّة، تُقدَّم مطويّة أو ملفوفة.",
+        "fr": "Fines galettes de pain saj moelleuses, pliées ou roulées.",
+        "en": "Soft, thin saj flatbreads, served folded or rolled."
+      },
+      "nameConflict": "الملف المُولَّد يكتبها «خبز صباح الحبة»؛ الملصق الأصلي «خبز صاج، الحبة بـ15» — أي أن «الحبة» وحدة تسعير لا جزء من الاسم.",
+      "source": "ملصق — خبز صاج الحبه بـ 15 اوقيه جديدة"
+    },
+    {
+      "id": "falafel-halabi", "category": "bakery", "price": 10, "image": "falafel-halabi",
+      "name": { "ar": "فلافل حلبية", "fr": "Falafel d'Alep", "en": "Aleppo Falafel" },
+      "desc": {
+        "ar": "أقراص فلافل مقرمشة بالسمسم، تُقدَّم مع مخلّل مقطّع.",
+        "fr": "Falafels croustillants au sésame, servis avec des pickles coupés.",
+        "en": "Crisp sesame-crusted falafel, served with chopped pickles."
+      },
+      "priceUnitUnconfirmed": true,
+      "source": "ملصق — فلافل حلبيه بسعر 10 اوقيه جديده"
+    }
+  ]
+}

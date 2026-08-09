@@ -1,0 +1,14 @@
+# نظام التشغيل
+.DS_Store
+Thumbs.db
+
+# المحررات
+.vscode/
+.idea/
+*.swp
+
+# لا يحتاج المشروع خطوة بناء ولا اعتماديات — هذه احتياطاً فقط
+node_modules/
+dist/
+.cache/
+*.log
