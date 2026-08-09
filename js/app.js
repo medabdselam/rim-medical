@@ -166,7 +166,6 @@ function renderChrome() {
   $('#ordersLabel').textContent = ui.ordersLabel;
   $('#feedbackLabel').textContent = ui.feedbackLabel;
   $('#payLabel').textContent = ui.paymentsLabel;
-  $('#printBtn').textContent = ui.print;
 
   $('#ordersValue').innerHTML =
     `<a href="tel:+${COUNTRY_CODE}${r.whatsapp}" dir="ltr">+${COUNTRY_CODE} ${esc(r.whatsapp)}</a>`;
@@ -544,7 +543,6 @@ function bind() {
     }
   });
 
-  $('#printBtn').addEventListener('click', () => window.print());
 }
 
 /** وميض قصير يؤكد الإضافة بصرياً. */
