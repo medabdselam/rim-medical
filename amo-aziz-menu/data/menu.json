@@ -85,7 +85,7 @@
         "fr": "Fèves au tahini et à l'huile, garnies de tomate, persil et grains de grenade.",
         "en": "Fava beans with tahini and oil, topped with tomato, parsley and pomegranate seeds."
       },
-      "todoConfirmName": "الملصق يسمّي الصنفين «فول حلبي» بلا تمييز، بسعرين 200 و150. أُضيفت لاحقة «بالطحينة» من وصف الطبق وصورته لتمييزه عن صنف 150. يحتاج تأكيد صاحب المطعم على التسمية.",
+      "nameConflict": "الملصق يسمّي الصنفين «فول حلبي» بلا تمييز بسعرين 200 و150. لاحقة «بالطحينة» مشتقّة من وصف الطبق وصورته — مؤكَّدة من صاحب المشروع.",
       "source": "ملصق — فول حلبي سعر 200 اوقيه جديده"
     },
     {
@@ -96,7 +96,7 @@
         "fr": "Fèves servies en barquette à emporter, avec amandes, persil et épices.",
         "en": "Fava beans served in a takeaway tub, with almonds, parsley and spices."
       },
-      "todoConfirmName": "الملصق يسمّي الصنفين «فول حلبي» بلا تمييز، بسعرين 200 و150. أُضيفت لاحقة «سفري» من وصف الطبق وصورته (علبة سفري) لتمييزه عن صنف 200. يحتاج تأكيد صاحب المطعم على التسمية.",
+      "nameConflict": "الملصق يسمّي الصنفين «فول حلبي» بلا تمييز بسعرين 200 و150. لاحقة «سفري» مشتقّة من وصف الطبق وصورته (علبة سفري) — مؤكَّدة من صاحب المشروع.",
       "source": "ملصق — فول حلبي [نص ممسوح] بسعر 150 اوقيه جديده"
     },
     {
