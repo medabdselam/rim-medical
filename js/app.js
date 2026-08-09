@@ -1,6 +1,7 @@
 import { LANGS, DEFAULT_LANG, UI } from './i18n.js';
 
 const STORE_KEY = 'amoaziz.lang';
+const CART_KEY  = 'amoaziz.cart';
 const COUNTRY_CODE = '222';           // موريتانيا — انظر SOURCES.md
 const SIZES = [400, 800, 1200];
 
@@ -14,6 +15,8 @@ const state = {
   menu: null,
   lqip: {},
   openDish: null,
+  cart: {},        // { dishId: quantity }
+  note: '',
 };
 
 /* ------------------------------------------------------------------ أدوات */
@@ -51,12 +54,74 @@ function priceLabel(dish) {
   return `${dish.price} ${t().currencyShort}${unit}`;
 }
 
-function waLink(dish) {
-  const lines = [t().waIntro];
-  if (dish) lines.push(`• ${L(dish.name)}${dish.price != null ? ` — ${dish.price} ${t().currencyShort}` : ''}`);
-  lines.push(`(${t().waFrom})`);
+/* ------------------------------------------------------------------ السلة */
+
+function loadCart() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CART_KEY) || '{}');
+    state.cart = raw.items && typeof raw.items === 'object' ? raw.items : {};
+    state.note = typeof raw.note === 'string' ? raw.note : '';
+  } catch { state.cart = {}; state.note = ''; }
+}
+
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify({ items: state.cart, note: state.note }));
+}
+
+const dishById = (id) => state.menu.dishes.find(d => d.id === id);
+
+/** أسطر السلة، متجاهلةً أي معرّف لم يعد موجوداً في القائمة. */
+function cartLines() {
+  return Object.entries(state.cart)
+    .map(([id, qty]) => ({ dish: dishById(id), qty }))
+    .filter(l => l.dish && l.qty > 0);
+}
+
+const cartCount = () => cartLines().reduce((n, l) => n + l.qty, 0);
+
+function cartTotals() {
+  let total = 0, onRequest = 0;
+  for (const { dish, qty } of cartLines()) {
+    if (dish.price == null) onRequest += qty;
+    else total += dish.price * qty;
+  }
+  return { total, onRequest };
+}
+
+function setQty(id, qty) {
+  if (qty > 0) state.cart[id] = Math.min(qty, 99);
+  else delete state.cart[id];
+  saveCart();
+  renderCartBar();
+  renderCartSheet();
+  syncCardBadges();
+}
+
+const addToCart = (id, n = 1) => setQty(id, (state.cart[id] || 0) + n);
+
+/** رسالة واتساب واحدة تحمل الطلب كاملاً. */
+function orderMessage() {
+  const ui = t();
+  const lines = [ui.waIntro, ''];
+  for (const { dish, qty } of cartLines()) {
+    const price = dish.price == null
+      ? ui.waOnRequest
+      : `${dish.price * qty} ${ui.currencyShort}`;
+    lines.push(`${qty} × ${L(dish.name)} — ${price}`);
+  }
+  const { total, onRequest } = cartTotals();
+  lines.push('');
+  if (total > 0) lines.push(`${ui.waTotal} ${total} ${ui.currencyShort}`);
+  if (onRequest > 0) lines.push(`+ ${ui.onRequestNote(onRequest)}`);
+  if (state.note.trim()) lines.push('', `${ui.waNote} ${state.note.trim()}`);
+  lines.push('', `(${ui.waFrom})`);
+  return lines.join('\n');
+}
+
+/** رابط واتساب. الرقم دولي بلا + ولا مسافات: 222 + الرقم المحلي. */
+function waLink() {
   const num = `${COUNTRY_CODE}${state.menu.restaurant.whatsapp}`;
-  return `https://wa.me/${num}?text=${encodeURIComponent(lines.join('\n'))}`;
+  return `https://wa.me/${num}?text=${encodeURIComponent(orderMessage())}`;
 }
 
 const esc = (s) => String(s).replace(/[&<>"']/g, c =>
@@ -84,11 +149,7 @@ function renderChrome() {
   $('#heroTag').textContent = L(r.tagline);
   $('#heroPromise').textContent = L(r.promise);
 
-  $('#ctaOrder').innerHTML = `${ICON_WA}<span>${esc(ui.orderWhatsapp)}</span>`;
-  $('#ctaOrder').href = waLink(null);
   $('#ctaMenu').textContent = ui.viewMenu;
-  $('#barOrder').innerHTML = `${ICON_WA}<span>${esc(ui.orderWhatsapp)}</span>`;
-  $('#barOrder').href = waLink(null);
 
   $('#searchIcon').innerHTML = ICON_SEARCH;
   const input = $('#search');
@@ -107,7 +168,8 @@ function renderChrome() {
   $('#payLabel').textContent = ui.paymentsLabel;
   $('#printBtn').textContent = ui.print;
 
-  $('#ordersValue').innerHTML = `<a href="${waLink(null)}" dir="ltr">${esc(r.whatsapp)}</a>`;
+  $('#ordersValue').innerHTML =
+    `<a href="tel:+${COUNTRY_CODE}${r.whatsapp}" dir="ltr">+${COUNTRY_CODE} ${esc(r.whatsapp)}</a>`;
   $('#feedbackValue').innerHTML = `<a href="tel:+${COUNTRY_CODE}${r.feedbackPhone}" dir="ltr">${esc(r.feedbackPhone)}</a>`;
   $('#payValue').innerHTML = r.payments.map(p => `<span>${esc(p)}</span>`).join('');
   $('#footName').textContent = L(r.name);
@@ -134,24 +196,39 @@ function visibleDishes() {
   });
 }
 
+/* بطاقة كلاسيكية على نسق القائمة المطبوعة: صورة، ثم الاسم، ثم شريط السعر —
+   وزر إضافة صغير فوق الصورة للطلب السريع بلا فتح النافذة. */
 function cardHTML(d) {
-  const img = imageAttrs(d.image, '(min-width:900px) 33vw, (min-width:560px) 50vw, 100vw');
+  const img = imageAttrs(d.image, '(min-width:900px) 300px, 46vw');
   const lq = state.lqip[d.image];
+  const qty = state.cart[d.id] || 0;
   const media = img
     ? `<img src="${img.src}" srcset="${img.srcset}" sizes="${img.sizes}"
            alt="${esc(L(d.name))}" loading="lazy" decoding="async" width="800" height="800">`
     : `<span class="card__noimg">${esc(t().noImage)}</span>`;
 
-  return `<button type="button" class="card" data-id="${d.id}">
-    <span class="card__media"${lq ? ` style="--lqip:url(${lq})"` : ''}>
-      ${media}
+  return `<article class="card${qty ? ' card--in' : ''}" data-id="${d.id}">
+    <button type="button" class="card__open" data-open="${d.id}">
+      <span class="card__media"${lq ? ` style="--lqip:url(${lq})"` : ''}>${media}</span>
+      <span class="card__name">${esc(L(d.name))}</span>
       <span class="card__price">${esc(priceLabel(d))}</span>
-    </span>
-    <span class="card__body">
-      <h3 class="card__name">${esc(L(d.name))}</h3>
-      <p class="card__desc">${esc(L(d.desc))}</p>
-    </span>
-  </button>`;
+    </button>
+    <button type="button" class="card__add" data-add="${d.id}"
+            aria-label="${esc(t().addToCart)} — ${esc(L(d.name))}">
+      <span class="card__addIcon" aria-hidden="true">+</span>
+      <span class="card__qty" data-qty="${d.id}">${qty || ''}</span>
+    </button>
+  </article>`;
+}
+
+/** يحدّث عدّادات البطاقات بعد كل تغيير في السلة دون إعادة بناء الشبكة. */
+function syncCardBadges() {
+  $$('.card').forEach(card => {
+    const qty = state.cart[card.dataset.id] || 0;
+    card.classList.toggle('card--in', qty > 0);
+    const badge = card.querySelector('[data-qty]');
+    if (badge) badge.textContent = qty || '';
+  });
 }
 
 function renderGrid() {
@@ -213,9 +290,15 @@ function openDish(id) {
           <span class="modal__price">${d.price != null
             ? `${d.price} <small>${esc(t().currencyShort)}${d.priceNote ? ' · ' + esc(L(d.priceNote)) : ''}</small>`
             : `<small>${esc(L(d.priceNote) || t().priceOnRequest)}</small>`}</span>
-          <a class="btn btn--wa" href="${waLink(d)}" target="_blank" rel="noopener">
-            ${ICON_WA}<span>${esc(t().orderThis)}</span></a>
+          <div class="stepper" role="group" aria-label="${esc(t().qty)}">
+            <button type="button" data-step="-1" aria-label="${esc(t().decrease)}">−</button>
+            <output data-modalqty>${state.cart[d.id] || 0}</output>
+            <button type="button" data-step="1" aria-label="${esc(t().increase)}">+</button>
+          </div>
         </div>
+        <button type="button" class="btn btn--gold modal__addBtn" data-add="${d.id}">
+          ${esc(t().addToCart)}
+        </button>
         ${related.length ? `<div class="related">
           <h4>${esc(t().alsoInCategory)}</h4>
           <div class="related__list">${related.map(r => {
@@ -234,6 +317,98 @@ function openDish(id) {
   $('#dishClose').focus();
 }
 
+/* ------------------------------------------------------- شريط السلة */
+
+/** الشريط الثابت أسفل الشاشة. عندما تكون السلة فارغة لا يفتح واتساب
+    إطلاقاً — بل يوجّه الزبون إلى اختيار طبق أولاً. */
+function renderCartBar() {
+  const ui = t();
+  const n = cartCount();
+  const { total, onRequest } = cartTotals();
+  const bar = $('#cartBar');
+
+  bar.classList.toggle('is-empty', n === 0);
+  if (n === 0) {
+    bar.innerHTML = `<button type="button" class="btn btn--ghost" id="cartCta">
+      <span>${esc(ui.pickDishFirst)}</span></button>`;
+  } else {
+    const amount = total > 0 ? `${total} ${ui.currencyShort}` : '';
+    const extra  = onRequest > 0 ? ` + ${ui.onRequestNote(onRequest)}` : '';
+    bar.innerHTML = `<button type="button" class="btn btn--gold cartbar__btn" id="cartCta">
+      <span class="cartbar__count">${n}</span>
+      <span class="cartbar__label">${esc(ui.viewCart)}</span>
+      <span class="cartbar__total">${esc(amount + extra)}</span>
+    </button>`;
+  }
+}
+
+function renderCartSheet() {
+  const dlg = $('#cart');
+  if (!dlg.open) return;
+  const ui = t();
+  const lines = cartLines();
+  const { total, onRequest } = cartTotals();
+
+  dlg.innerHTML = `
+    <div class="modal__scroll">
+      <div class="sheet__head">
+        <h3>${esc(ui.cart)}</h3>
+        <button type="button" class="modal__close sheet__close" id="cartClose"
+                aria-label="${esc(ui.close)}">&times;</button>
+      </div>
+      ${lines.length === 0 ? `
+        <div class="sheet__empty">
+          <p><strong>${esc(ui.cartEmpty)}</strong></p>
+          <p>${esc(ui.cartEmptyHint)}</p>
+          <button type="button" class="btn btn--gold" id="cartBrowse">${esc(ui.browseMenu)}</button>
+        </div>` : `
+        <ul class="cartlist">
+          ${lines.map(({ dish, qty }) => `
+            <li class="cartlist__row">
+              ${dish.image ? `<img src="assets/dishes/${dish.image}-400.webp" alt=""
+                    loading="lazy" width="64" height="64">` : '<span class="cartlist__ph"></span>'}
+              <div class="cartlist__txt">
+                <span class="cartlist__name">${esc(L(dish.name))}</span>
+                <span class="cartlist__price">${dish.price != null
+                  ? `${dish.price * qty} ${esc(ui.currencyShort)}`
+                  : esc(L(dish.priceNote) || ui.priceOnRequest)}</span>
+              </div>
+              <div class="stepper" role="group" aria-label="${esc(ui.qty)}">
+                <button type="button" data-cartstep="-1" data-id="${dish.id}"
+                        aria-label="${esc(ui.decrease)}">−</button>
+                <output>${qty}</output>
+                <button type="button" data-cartstep="1" data-id="${dish.id}"
+                        aria-label="${esc(ui.increase)}">+</button>
+              </div>
+            </li>`).join('')}
+        </ul>
+
+        <label class="cartnote">
+          <span>${esc(ui.noteLabel)}</span>
+          <textarea id="cartNote" rows="2" placeholder="${esc(ui.notePlaceholder)}">${esc(state.note)}</textarea>
+        </label>
+
+        <div class="carttotal">
+          <span>${esc(ui.total)}</span>
+          <strong>${total > 0 ? `${total} ${esc(ui.currencyShort)}` : '—'}</strong>
+        </div>
+        ${onRequest > 0 ? `<p class="carttotal__note">+ ${esc(ui.onRequestNote(onRequest))}</p>` : ''}
+
+        <div class="sheet__actions">
+          <a class="btn btn--wa" id="cartSend" href="${waLink()}" target="_blank" rel="noopener">
+            ${ICON_WA}<span>${esc(ui.sendOrder)}</span></a>
+          <button type="button" class="btn btn--ghost" id="cartClear">${esc(ui.clearCart)}</button>
+        </div>`}
+    </div>`;
+}
+
+function openCart() {
+  const dlg = $('#cart');
+  if (!dlg.open) dlg.showModal();
+  renderCartSheet();
+  $('#cartClose')?.focus();
+}
+
 function closeDish() {
   state.openDish = null;
   const dlg = $('#dish');
@@ -250,6 +425,8 @@ function setLang(code) {
   applyLangAttrs();
   renderChrome();
   renderGrid();
+  renderCartBar();
+  renderCartSheet();
   // القسم الحالي والبحث محفوظان في state، والطبق المفتوح يُعاد فتحه باللغة الجديدة
   if (state.openDish) openDish(state.openDish);
   window.scrollTo({ top: y, behavior: 'instant' in document.documentElement.style ? 'instant' : 'auto' });
@@ -290,8 +467,10 @@ function bind() {
       renderGrid();
       return;
     }
-    const card = e.target.closest('.card');
-    if (card) openDish(card.dataset.id);
+    const add = e.target.closest('[data-add]');
+    if (add) { addToCart(add.dataset.add); flash(add); return; }
+    const open = e.target.closest('[data-open]');
+    if (open) openDish(open.dataset.open);
   });
 
   const dlg = $('#dish');
@@ -299,6 +478,22 @@ function bind() {
     if (e.target.closest('#dishClose')) return closeDish();
     const lang = e.target.closest('[data-lang]');
     if (lang) return setLang(lang.dataset.lang);
+    const step = e.target.closest('[data-step]');
+    if (step && state.openDish) {
+      const cur = state.cart[state.openDish] || 0;
+      setQty(state.openDish, Math.max(0, cur + Number(step.dataset.step)));
+      const out = dlg.querySelector('[data-modalqty]');
+      if (out) out.textContent = state.cart[state.openDish] || 0;
+      return;
+    }
+    const add = e.target.closest('[data-add]');
+    if (add) {
+      if (!state.cart[add.dataset.add]) addToCart(add.dataset.add);
+      const out = dlg.querySelector('[data-modalqty]');
+      if (out) out.textContent = state.cart[add.dataset.add] || 0;
+      flash(add); closeDish(); openCart();
+      return;
+    }
     const rel = e.target.closest('.related__item');
     if (rel) return openDish(rel.dataset.id);
     // النقر على الخلفية خارج الورقة يغلقها
@@ -306,7 +501,71 @@ function bind() {
   });
   dlg.addEventListener('close', () => { state.openDish = null; });
 
+  // شريط السلة الثابت
+  $('#cartBar').addEventListener('click', e => {
+    if (!e.target.closest('#cartCta')) return;
+    if (cartCount() === 0) {
+      // السلة فارغة: لا نفتح واتساب. نأخذه إلى الأطباق ونشرح السبب.
+      document.getElementById('menu').scrollIntoView({ block: 'start' });
+      toast(t().cartEmptyHint);
+      return;
+    }
+    openCart();
+  });
+
+  const cart = $('#cart');
+  cart.addEventListener('click', e => {
+    if (e.target.closest('#cartClose') || e.target === cart) return cart.close();
+    if (e.target.closest('#cartBrowse')) {
+      cart.close();
+      document.getElementById('menu').scrollIntoView({ block: 'start' });
+      return;
+    }
+    if (e.target.closest('#cartClear')) {
+      state.cart = {}; state.note = ''; saveCart();
+      renderCartBar(); renderCartSheet(); syncCardBadges();
+      return;
+    }
+    const step = e.target.closest('[data-cartstep]');
+    if (step) {
+      const id = step.dataset.id;
+      setQty(id, (state.cart[id] || 0) + Number(step.dataset.cartstep));
+      return;
+    }
+    // زر الإرسال: نحدّث الرابط لحظة النقر حتى يحمل آخر حالة للسلة والملاحظة
+    const send = e.target.closest('#cartSend');
+    if (send) send.href = waLink();
+  });
+  cart.addEventListener('input', e => {
+    if (e.target.id === 'cartNote') {
+      state.note = e.target.value; saveCart();
+      const send = $('#cartSend');            // أبقِ الرابط مطابقاً للملاحظة لحظةً بلحظة
+      if (send) send.href = waLink();
+    }
+  });
+
   $('#printBtn').addEventListener('click', () => window.print());
+}
+
+/** وميض قصير يؤكد الإضافة بصرياً. */
+function flash(el) {
+  el.classList.remove('is-flash');
+  void el.offsetWidth;
+  el.classList.add('is-flash');
+}
+
+let toastTimer;
+function toast(msg) {
+  let el = $('#toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status');
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('is-on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('is-on'), 2600);
 }
 
 /* --------------------------------------------------------------- الإقلاع */
@@ -323,8 +582,10 @@ async function boot() {
   state.menu = menu;
   state.lqip = Object.fromEntries(Object.entries(lqip).map(([k, v]) => [k, v.lqip]));
 
+  loadCart();
   renderChrome();
   renderGrid();
+  renderCartBar();
   bind();
   document.body.classList.add('ready');
 }
