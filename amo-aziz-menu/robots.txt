@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mr0med.github.io/amo-aziz-menu/sitemap.xml
+Sitemap: https://medabdselam.github.io/amo-azuz-menu/sitemap.xml

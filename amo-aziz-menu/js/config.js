@@ -10,7 +10,7 @@ export const CONFIG = {
   /* العنوان النهائي للموقع بعد النشر — بلا شرطة مائلة في آخره.
      يُستعمل في canonical و og:url و sitemap.xml.
      غيّره إذا نقلت الموقع إلى نطاق خاص. */
-  siteUrl: 'https://mr0med.github.io/amo-aziz-menu',
+  siteUrl: 'https://medabdselam.github.io/amo-azuz-menu',
 
   /* اسم الموقع كما يظهر في معاينة الروابط على واتساب وفيسبوك */
   siteName: 'مطعم عمو عزيز',
