@@ -1,0 +1,16 @@
+{
+  "name": "amo-aziz-menu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "قائمة طعام مطعم عمو عزيز — كتالوج رقمي ثلاثي اللغات",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "seo": "node tools/build-seo.mjs",
+    "share-card": "node tools/build-share-card.mjs"
+  },
+  "//": "playwright أداة تطوير فقط، لتوليد صورة معاينة المشاركة. الموقع نفسه بلا أي اعتمادية وقت تشغيل.",
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}

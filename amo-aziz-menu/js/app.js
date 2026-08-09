@@ -1,9 +1,13 @@
 import { LANGS, DEFAULT_LANG, UI } from './i18n.js';
+import { CONFIG } from './config.js';
 
 const STORE_KEY = 'amoaziz.lang';
 const CART_KEY  = 'amoaziz.cart';
-const COUNTRY_CODE = '222';           // موريتانيا — انظر SOURCES.md
 const SIZES = [400, 800, 1200];
+
+/* رمز الدولة يأتي من data/menu.json مع بقية بيانات المطعم،
+   حتى تبقى كل أرقام التواصل في ملف واحد يعدّله صاحب المطعم. */
+const cc = () => state.menu.restaurant.countryCode;
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -23,6 +27,21 @@ const state = {
 
 const t = () => UI[state.lang];
 const L = (obj) => (obj && (obj[state.lang] ?? obj.ar)) || '';
+
+/* تطبيع النص قبل البحث: يوحّد صور الألف والهمزة والتاء المربوطة والألف
+   المقصورة، ويحذف التشكيل والتطويل. بدونه لا يجد من كتب «منقوشه» شيئاً. */
+const AR_DIACRITICS = /[ؐ-ًؚ-ٰٟۖ-ۭـ]/g;
+function norm(s) {
+  return String(s).toLowerCase()
+    .replace(AR_DIACRITICS, '')
+    .replace(/[أإآٱ]/g, 'ا')
+    .replace(/ؤ/g, 'و')
+    .replace(/[ئى]/g, 'ي')
+    .replace(/ة/g, 'ه')
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')  // يزيل لكنات الفرنسية: é → e
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 /* العربية هي اللغة الافتراضية دائماً. لا نستشعر لغة المتصفح: زبائن المطعم
    عرب، ولغة الجهاز قد تكون فرنسية أو إنجليزية دون أن تكون هي المطلوبة.
@@ -113,14 +132,16 @@ function orderMessage() {
   lines.push('');
   if (total > 0) lines.push(`${ui.waTotal} ${total} ${ui.currencyShort}`);
   if (onRequest > 0) lines.push(`+ ${ui.onRequestNote(onRequest)}`);
-  if (state.note.trim()) lines.push('', `${ui.waNote} ${state.note.trim()}`);
+  if (state.note.trim()) lines.push(`${ui.waNote} ${state.note.trim()}`);
+  // حقول يتركها الزبون فارغة ليملأها بنفسه في واتساب قبل الإرسال
+  lines.push('', ui.waName, ui.waAddress);
   lines.push('', `(${ui.waFrom})`);
   return lines.join('\n');
 }
 
-/** رابط واتساب. الرقم دولي بلا + ولا مسافات: 222 + الرقم المحلي. */
+/** رابط واتساب. الرقم دولي بلا + ولا مسافات: رمز الدولة + الرقم المحلي. */
 function waLink() {
-  const num = `${COUNTRY_CODE}${state.menu.restaurant.whatsapp}`;
+  const num = `${cc()}${state.menu.restaurant.whatsapp}`;
   return `https://wa.me/${num}?text=${encodeURIComponent(orderMessage())}`;
 }
 
@@ -129,6 +150,7 @@ const esc = (s) => String(s).replace(/[&<>"']/g, c =>
 
 const ICON_WA = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.2s-.7 1-.9 1.2c-.2.2-.3.2-.6.1-1.7-.9-2.9-1.6-4-3.5-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5s-.7-1.6-.9-2.2c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2A10 10 0 0 0 3.5 17.3L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-2.9.9.9-2.8-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>`;
 const ICON_SEARCH = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>`;
+const ICON_SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5 15.4 6.6M8.6 13.5l6.8 3.9"/></svg>`;
 
 /* ------------------------------------------------------------------ العرض */
 
@@ -168,8 +190,10 @@ function renderChrome() {
   $('#payLabel').textContent = ui.paymentsLabel;
 
   $('#ordersValue').innerHTML =
-    `<a href="tel:+${COUNTRY_CODE}${r.whatsapp}" dir="ltr">+${COUNTRY_CODE} ${esc(r.whatsapp)}</a>`;
-  $('#feedbackValue').innerHTML = `<a href="tel:+${COUNTRY_CODE}${r.feedbackPhone}" dir="ltr">${esc(r.feedbackPhone)}</a>`;
+    `<a href="tel:+${cc()}${r.whatsapp}" dir="ltr">+${cc()} ${esc(r.whatsapp)}</a>`;
+  $('#feedbackValue').innerHTML =
+    `<a href="tel:+${cc()}${r.feedbackPhone}" dir="ltr">+${cc()} ${esc(r.feedbackPhone)}</a>`;
+  $('#shareBtn').innerHTML = `${ICON_SHARE}<span>${esc(ui.share)}</span>`;
   $('#payValue').innerHTML = r.payments.map(p => `<span>${esc(p)}</span>`).join('');
   $('#footName').textContent = L(r.name);
 
@@ -185,13 +209,14 @@ function renderChrome() {
 }
 
 function visibleDishes() {
-  const q = state.query.trim().toLowerCase();
+  const q = norm(state.query);
   return state.menu.dishes.filter(d => {
     if (state.category !== 'all' && d.category !== state.category) return false;
     if (!q) return true;
-    const hay = [d.name.ar, d.name.fr, d.name.en, d.desc?.ar, d.desc?.fr, d.desc?.en]
-      .filter(Boolean).join(' ').toLowerCase();
-    return hay.includes(q);
+    // يُبنى مرة واحدة لكل طبق ويُخزَّن عليه — البحث يُستدعى مع كل ضغطة حرف
+    d._hay ??= norm([d.name.ar, d.name.fr, d.name.en, d.desc?.ar, d.desc?.fr, d.desc?.en]
+      .filter(Boolean).join(' '));
+    return d._hay.includes(q);
   });
 }
 
@@ -300,19 +325,17 @@ function openDish(id) {
         </button>
         ${related.length ? `<div class="related">
           <h4>${esc(t().alsoInCategory)}</h4>
-          <div class="related__list">${related.map(r => {
-            const ri = imageAttrs(r.image, '108px');
-            return `<button type="button" class="related__item" data-id="${r.id}">
-              ${ri ? `<img src="assets/dishes/${r.image}-400.webp" alt="" loading="lazy" width="108" height="108">` : ''}
+          <div class="related__list">${related.map(r => `
+            <button type="button" class="related__item" data-id="${r.id}">
+              ${r.image ? `<img src="assets/dishes/${r.image}-400.webp" alt="" loading="lazy" width="108" height="108">` : ''}
               <span>${esc(L(r.name))}</span>
               <b>${esc(priceLabel(r))}</b>
-            </button>`; }).join('')}</div>
+            </button>`).join('')}</div>
         </div>` : ''}
       </div>
     </div>`;
 
   if (!dlg.open) dlg.showModal();
-  dlg.scrollTop = 0;
   $('#dishClose').focus();
 }
 
@@ -392,6 +415,8 @@ function renderCartSheet() {
           <strong>${total > 0 ? `${total} ${esc(ui.currencyShort)}` : '—'}</strong>
         </div>
         ${onRequest > 0 ? `<p class="carttotal__note">+ ${esc(ui.onRequestNote(onRequest))}</p>` : ''}
+
+        <p class="sheet__hint">${esc(ui.waFillHint)}</p>
 
         <div class="sheet__actions">
           <a class="btn btn--wa" id="cartSend" href="${waLink()}" target="_blank" rel="noopener">
@@ -535,6 +560,8 @@ function bind() {
     const send = e.target.closest('#cartSend');
     if (send) send.href = waLink();
   });
+  $('#shareBtn').addEventListener('click', shareMenu);
+
   cart.addEventListener('input', e => {
     if (e.target.id === 'cartNote') {
       state.note = e.target.value; saveCart();
@@ -543,6 +570,34 @@ function bind() {
     }
   });
 
+}
+
+/* ------------------------------------------------------------ المشاركة */
+
+/** يشارك رابط القائمة عبر ورقة المشاركة الأصلية للنظام، ويسقط إلى
+    نسخ الرابط عندما لا تتوفر (أغلب متصفحات سطح المكتب).
+    الرابط المُشارَك هو العنوان الرسمي دائماً لا عنوان التبويب الحالي،
+    حتى لا تُشارَك روابط تحمل معاملات بحث أو مرساة قسم. */
+async function shareMenu() {
+  const ui = t();
+  const url = CONFIG.siteUrl + '/';
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: ui.shareTitle, text: ui.shareText, url });
+      return;
+    } catch (err) {
+      if (err.name === 'AbortError') return;   // ألغى المستخدم المشاركة
+      /* غير ذلك: نكمل إلى النسخ */
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(url);
+    toast(ui.linkCopied);
+  } catch {
+    toast(ui.linkCopyFailed);
+  }
 }
 
 /** وميض قصير يؤكد الإضافة بصرياً. */
@@ -585,10 +640,21 @@ async function boot() {
   renderGrid();
   renderCartBar();
   bind();
-  document.body.classList.add('ready');
 }
 
-boot().catch(err => {
+/* التخزين المؤقت للعمل بلا إنترنت. يُسجَّل بعد اكتمال التحميل حتى لا
+   ينافس عرض الصفحة الأول، ويُتجاهل بصمت إذا رُفض (فتح الملف محلياً
+   عبر file:// مثلاً) — الموقع يعمل كاملاً بدونه. */
+function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  const go = () => navigator.serviceWorker.register('sw.js').catch(() => {});
+  // boot() غير متزامنة، وقد يكون حدث load قد مضى قبل أن تنتهي —
+  // عندها لن يُستدعى المستمع أبداً، فنسجّل فوراً.
+  if (document.readyState === 'complete') go();
+  else addEventListener('load', go, { once: true });
+}
+
+boot().then(registerSW).catch(err => {
   console.error(err);
   document.getElementById('menu').innerHTML =
     '<p class="empty">تعذّر تحميل القائمة. حدِّث الصفحة.<br>Impossible de charger le menu.<br>Could not load the menu.</p>';

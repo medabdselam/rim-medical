@@ -1,6 +1,5 @@
 {
-  "$schema": "./menu.schema.md",
-  "_note": "المصدر الوحيد للأصناف والأسعار. عدّل هنا فقط — لا تلمس الكود. راجع SOURCES.md لمعرفة مصدر كل قيمة.",
+  "_note": "المصدر الوحيد للأصناف والأسعار وبيانات المطعم. عدّل هنا فقط — لا تلمس الكود. راجع SOURCES.md لمعرفة مصدر كل قيمة.",
 
   "restaurant": {
     "name":  { "ar": "مطعم عمو عزيز", "fr": "Restaurant Amo Aziz", "en": "Amo Aziz Restaurant" },
@@ -20,6 +19,7 @@
       "fr": "Rue descendant de la route de Nouadhibou vers les Affaires étrangères, mini-market — face à la Pharmacie 28 Novembre",
       "en": "The street running down from Nouadhibou Road toward the Foreign Ministry, mini-market — opposite 28 November Pharmacy"
     },
+    "countryCode": "222",
     "whatsapp": "44408922",
     "feedbackPhone": "33474751",
     "currency": { "ar": "أوقية جديدة", "fr": "MRU", "en": "MRU" },
@@ -79,24 +79,24 @@
     },
     {
       "id": "foul-halabi-a", "category": "mains", "price": 200, "image": "foul-halabi-a",
-      "name": { "ar": "فول حلبي", "fr": "Foul d'Alep", "en": "Aleppo Foul" },
+      "name": { "ar": "فول حلبي بالطحينة", "fr": "Foul d'Alep au tahini", "en": "Aleppo Foul with Tahini" },
       "desc": {
         "ar": "فول مع طحينة وزيت، مزيّن بالطماطم والبقدونس وحبّ الرمان.",
         "fr": "Fèves au tahini et à l'huile, garnies de tomate, persil et grains de grenade.",
         "en": "Fava beans with tahini and oil, topped with tomato, parsley and pomegranate seeds."
       },
-      "priceConflict": "يظهر «فول حلبي» في المصدر مرتين بسعرين: 200 و150 أوقية، دون بيان الفرق. الصنفان معروضان كما وردا.",
+      "todoConfirmName": "الملصق يسمّي الصنفين «فول حلبي» بلا تمييز، بسعرين 200 و150. أُضيفت لاحقة «بالطحينة» من وصف الطبق وصورته لتمييزه عن صنف 150. يحتاج تأكيد صاحب المطعم على التسمية.",
       "source": "ملصق — فول حلبي سعر 200 اوقيه جديده"
     },
     {
       "id": "foul-halabi-b", "category": "mains", "price": 150, "image": "foul-halabi-b",
-      "name": { "ar": "فول حلبي", "fr": "Foul d'Alep", "en": "Aleppo Foul" },
+      "name": { "ar": "فول حلبي سفري", "fr": "Foul d'Alep à emporter", "en": "Aleppo Foul — Takeaway" },
       "desc": {
         "ar": "فول مقدَّم في علبة سفري، مع اللوز والبقدونس والبهارات.",
         "fr": "Fèves servies en barquette à emporter, avec amandes, persil et épices.",
         "en": "Fava beans served in a takeaway tub, with almonds, parsley and spices."
       },
-      "priceConflict": "يظهر «فول حلبي» في المصدر مرتين بسعرين: 200 و150 أوقية، دون بيان الفرق. الصنفان معروضان كما وردا.",
+      "todoConfirmName": "الملصق يسمّي الصنفين «فول حلبي» بلا تمييز، بسعرين 200 و150. أُضيفت لاحقة «سفري» من وصف الطبق وصورته (علبة سفري) لتمييزه عن صنف 200. يحتاج تأكيد صاحب المطعم على التسمية.",
       "source": "ملصق — فول حلبي [نص ممسوح] بسعر 150 اوقيه جديده"
     },
     {

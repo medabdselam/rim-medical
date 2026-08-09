@@ -183,8 +183,6 @@ a { color: inherit; }
   padding-block: 6px; padding-inline: 14px;
 }
 .hero__cta { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-block-start: 14px; }
-/* على الهاتف يكفي زر واحد فوق الطيّة — زر الطلب ثابت أسفل الشاشة أصلاً */
-@media (max-width: 619px) { #ctaOrder { display: none; } }
 
 /* ============================ الأزرار ============================ */
 
@@ -213,6 +211,12 @@ a { color: inherit; }
 }
 .btn--ghost:hover { background: rgba(244,237,225,.12); }
 .btn svg { width: 20px; height: 20px; flex: none; }
+/* زر الإضافة داخل نافذة الطبق يأخذ العرض كاملاً — هدف لمس واسع */
+.modal__addBtn { display: flex; width: 100%; margin-block-start: 14px; }
+
+/* زر مشاركة القائمة */
+.share { display: flex; justify-content: center; margin-block: 26px 6px; }
+.share .btn { width: min(420px, 100%); }
 
 /* ============================ شريط الأقسام والبحث ============================ */
 
@@ -558,6 +562,8 @@ dialog.modal[open] { animation: sheet-in .26s cubic-bezier(.2,.8,.3,1); }
 }
 .carttotal strong { margin-inline-start: auto; font-size: 22px; color: var(--gold); }
 .carttotal__note { margin: 4px 0 0; padding-inline: var(--pad); font-size: 13px; color: var(--muted); }
+/* تنبيه قبل زر الإرسال: الاسم والعنوان يُكتبان داخل واتساب */
+.sheet__hint { margin: 12px 0 0; padding-inline: var(--pad); font-size: 13px; color: var(--muted); }
 
 .sheet__actions {
   display: flex; flex-direction: column; gap: 10px;

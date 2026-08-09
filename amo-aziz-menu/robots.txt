@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://medabdselam.github.io/amo-aziz-menu/sitemap.xml
