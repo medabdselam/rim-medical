@@ -214,9 +214,13 @@ a { color: inherit; }
 /* زر الإضافة داخل نافذة الطبق يأخذ العرض كاملاً — هدف لمس واسع */
 .modal__addBtn { display: flex; width: 100%; margin-block-start: 14px; }
 
-/* زر مشاركة القائمة */
-.share { display: flex; justify-content: center; margin-block: 26px 6px; }
+/* زرّا المشاركة والانتقال إلى الكتالوج السريع */
+.share {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin-block: 26px 6px;
+}
 .share .btn { width: min(420px, 100%); }
+@media (min-width: 620px) { .share .btn { width: auto; min-width: 240px; } }
 
 /* ============================ شريط الأقسام والبحث ============================ */
 

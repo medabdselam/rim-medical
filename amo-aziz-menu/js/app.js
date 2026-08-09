@@ -1,156 +1,21 @@
 import { LANGS, DEFAULT_LANG, UI } from './i18n.js';
 import { CONFIG } from './config.js';
+import {
+  state, setBase, $, $$, t, L, esc, norm, readLang, storeLang, applyLangAttrs,
+  loadMenu, imageAttrs, priceLabel,
+  loadCart, saveCart, cartLines, cartCount, cartTotals, setQty, addToCart,
+  clearCart, setNote, orderMessage, waLink, onCartChange,
+  ICON_WA, ICON_SEARCH, ICON_SHARE, shareLink,
+} from './core.js';
+import { renderCartBar, renderCartSheet, openCart, mountCart } from './cart-ui.js';
 
-const STORE_KEY = 'amoaziz.lang';
-const CART_KEY  = 'amoaziz.cart';
-const SIZES = [400, 800, 1200];
+/* الواجهة الكاملة تعيش في جذر الموقع */
+setBase('');
 
-/* رمز الدولة يأتي من data/menu.json مع بقية بيانات المطعم،
-   حتى تبقى كل أرقام التواصل في ملف واحد يعدّله صاحب المطعم. */
-const cc = () => state.menu.restaurant.countryCode;
+/* حالة خاصة بهذه الواجهة وحدها — البحث والقسم والطبق المفتوح.
+   أما اللغة والقائمة والسلة فمشتركة في core.js */
+Object.assign(state, { category: 'all', query: '', openDish: null });
 
-const $  = (s, r = document) => r.querySelector(s);
-const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-
-const state = {
-  lang: DEFAULT_LANG,
-  category: 'all',
-  query: '',
-  menu: null,
-  lqip: {},
-  openDish: null,
-  cart: {},        // { dishId: quantity }
-  note: '',
-};
-
-/* ------------------------------------------------------------------ أدوات */
-
-const t = () => UI[state.lang];
-const L = (obj) => (obj && (obj[state.lang] ?? obj.ar)) || '';
-
-/* تطبيع النص قبل البحث: يوحّد صور الألف والهمزة والتاء المربوطة والألف
-   المقصورة، ويحذف التشكيل والتطويل. بدونه لا يجد من كتب «منقوشه» شيئاً. */
-const AR_DIACRITICS = /[ؐ-ًؚ-ٰٟۖ-ۭـ]/g;
-function norm(s) {
-  return String(s).toLowerCase()
-    .replace(AR_DIACRITICS, '')
-    .replace(/[أإآٱ]/g, 'ا')
-    .replace(/ؤ/g, 'و')
-    .replace(/[ئى]/g, 'ي')
-    .replace(/ة/g, 'ه')
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')  // يزيل لكنات الفرنسية: é → e
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-/* العربية هي اللغة الافتراضية دائماً. لا نستشعر لغة المتصفح: زبائن المطعم
-   عرب، ولغة الجهاز قد تكون فرنسية أو إنجليزية دون أن تكون هي المطلوبة.
-   نحترم فقط اختياراً صريحاً سبق أن حفظه المستخدم. */
-function readLang() {
-  const saved = localStorage.getItem(STORE_KEY);
-  return (saved && LANGS[saved]) ? saved : DEFAULT_LANG;
-}
-
-function applyLangAttrs() {
-  const { code, dir } = LANGS[state.lang];
-  document.documentElement.lang = code;
-  document.documentElement.dir = dir;
-}
-
-/** يبني srcset لصورة طبق. يعيد null إذا لم تكن هناك صورة. */
-function imageAttrs(slug, sizesAttr) {
-  if (!slug) return null;
-  return {
-    src: `assets/dishes/${slug}-800.webp`,
-    srcset: SIZES.map(w => `assets/dishes/${slug}-${w}.webp ${w}w`).join(', '),
-    sizes: sizesAttr,
-  };
-}
-
-function priceLabel(dish) {
-  if (dish.price == null) return L(dish.priceNote) || t().priceOnRequest;
-  const unit = dish.priceNote ? ` ${L(dish.priceNote)}` : '';
-  return `${dish.price} ${t().currencyShort}${unit}`;
-}
-
-/* ------------------------------------------------------------------ السلة */
-
-function loadCart() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(CART_KEY) || '{}');
-    state.cart = raw.items && typeof raw.items === 'object' ? raw.items : {};
-    state.note = typeof raw.note === 'string' ? raw.note : '';
-  } catch { state.cart = {}; state.note = ''; }
-}
-
-function saveCart() {
-  localStorage.setItem(CART_KEY, JSON.stringify({ items: state.cart, note: state.note }));
-}
-
-const dishById = (id) => state.menu.dishes.find(d => d.id === id);
-
-/** أسطر السلة، متجاهلةً أي معرّف لم يعد موجوداً في القائمة. */
-function cartLines() {
-  return Object.entries(state.cart)
-    .map(([id, qty]) => ({ dish: dishById(id), qty }))
-    .filter(l => l.dish && l.qty > 0);
-}
-
-const cartCount = () => cartLines().reduce((n, l) => n + l.qty, 0);
-
-function cartTotals() {
-  let total = 0, onRequest = 0;
-  for (const { dish, qty } of cartLines()) {
-    if (dish.price == null) onRequest += qty;
-    else total += dish.price * qty;
-  }
-  return { total, onRequest };
-}
-
-function setQty(id, qty) {
-  if (qty > 0) state.cart[id] = Math.min(qty, 99);
-  else delete state.cart[id];
-  saveCart();
-  renderCartBar();
-  renderCartSheet();
-  syncCardBadges();
-}
-
-const addToCart = (id, n = 1) => setQty(id, (state.cart[id] || 0) + n);
-
-/** رسالة واتساب واحدة تحمل الطلب كاملاً. */
-function orderMessage() {
-  const ui = t();
-  const lines = [ui.waIntro, ''];
-  for (const { dish, qty } of cartLines()) {
-    const price = dish.price == null
-      ? ui.waOnRequest
-      : `${dish.price * qty} ${ui.currencyShort}`;
-    lines.push(`${qty} × ${L(dish.name)} — ${price}`);
-  }
-  const { total, onRequest } = cartTotals();
-  lines.push('');
-  if (total > 0) lines.push(`${ui.waTotal} ${total} ${ui.currencyShort}`);
-  if (onRequest > 0) lines.push(`+ ${ui.onRequestNote(onRequest)}`);
-  if (state.note.trim()) lines.push(`${ui.waNote} ${state.note.trim()}`);
-  // حقول يتركها الزبون فارغة ليملأها بنفسه في واتساب قبل الإرسال
-  lines.push('', ui.waName, ui.waAddress);
-  lines.push('', `(${ui.waFrom})`);
-  return lines.join('\n');
-}
-
-/** رابط واتساب. الرقم دولي بلا + ولا مسافات: رمز الدولة + الرقم المحلي. */
-function waLink() {
-  const num = `${cc()}${state.menu.restaurant.whatsapp}`;
-  return `https://wa.me/${num}?text=${encodeURIComponent(orderMessage())}`;
-}
-
-const esc = (s) => String(s).replace(/[&<>"']/g, c =>
-  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-
-const ICON_WA = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.2s-.7 1-.9 1.2c-.2.2-.3.2-.6.1-1.7-.9-2.9-1.6-4-3.5-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5s-.7-1.6-.9-2.2c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.3 5.2 4.6 1.9.8 2.7.9 3.6.8.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4zM12 2A10 10 0 0 0 3.5 17.3L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-2.9.9.9-2.8-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>`;
-const ICON_SEARCH = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>`;
-const ICON_SHARE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5 15.4 6.6M8.6 13.5l6.8 3.9"/></svg>`;
 
 /* ------------------------------------------------------------------ العرض */
 
@@ -190,10 +55,11 @@ function renderChrome() {
   $('#payLabel').textContent = ui.paymentsLabel;
 
   $('#ordersValue').innerHTML =
-    `<a href="tel:+${cc()}${r.whatsapp}" dir="ltr">+${cc()} ${esc(r.whatsapp)}</a>`;
+    `<a href="tel:+${r.countryCode}${r.whatsapp}" dir="ltr">+${r.countryCode} ${esc(r.whatsapp)}</a>`;
   $('#feedbackValue').innerHTML =
-    `<a href="tel:+${cc()}${r.feedbackPhone}" dir="ltr">+${cc()} ${esc(r.feedbackPhone)}</a>`;
+    `<a href="tel:+${r.countryCode}${r.feedbackPhone}" dir="ltr">+${r.countryCode} ${esc(r.feedbackPhone)}</a>`;
   $('#shareBtn').innerHTML = `${ICON_SHARE}<span>${esc(ui.share)}</span>`;
+  $('#quickLink').textContent = ui.quickCatalog;
   $('#payValue').innerHTML = r.payments.map(p => `<span>${esc(p)}</span>`).join('');
   $('#footName').textContent = L(r.name);
 
@@ -339,100 +205,6 @@ function openDish(id) {
   $('#dishClose').focus();
 }
 
-/* ------------------------------------------------------- شريط السلة */
-
-/** الشريط الثابت أسفل الشاشة. عندما تكون السلة فارغة لا يفتح واتساب
-    إطلاقاً — بل يوجّه الزبون إلى اختيار طبق أولاً. */
-function renderCartBar() {
-  const ui = t();
-  const n = cartCount();
-  const { total, onRequest } = cartTotals();
-  const bar = $('#cartBar');
-
-  bar.classList.toggle('is-empty', n === 0);
-  if (n === 0) {
-    bar.innerHTML = `<button type="button" class="btn btn--ghost" id="cartCta">
-      <span>${esc(ui.pickDishFirst)}</span></button>`;
-  } else {
-    const amount = total > 0 ? `${total} ${ui.currencyShort}` : '';
-    const extra  = onRequest > 0 ? ` + ${ui.onRequestNote(onRequest)}` : '';
-    bar.innerHTML = `<button type="button" class="btn btn--gold cartbar__btn" id="cartCta">
-      <span class="cartbar__count">${n}</span>
-      <span class="cartbar__label">${esc(ui.viewCart)}</span>
-      <span class="cartbar__total">${esc(amount + extra)}</span>
-    </button>`;
-  }
-}
-
-function renderCartSheet() {
-  const dlg = $('#cart');
-  if (!dlg.open) return;
-  const ui = t();
-  const lines = cartLines();
-  const { total, onRequest } = cartTotals();
-
-  dlg.innerHTML = `
-    <div class="modal__scroll">
-      <div class="sheet__head">
-        <h3>${esc(ui.cart)}</h3>
-        <button type="button" class="modal__close sheet__close" id="cartClose"
-                aria-label="${esc(ui.close)}">&times;</button>
-      </div>
-      ${lines.length === 0 ? `
-        <div class="sheet__empty">
-          <p><strong>${esc(ui.cartEmpty)}</strong></p>
-          <p>${esc(ui.cartEmptyHint)}</p>
-          <button type="button" class="btn btn--gold" id="cartBrowse">${esc(ui.browseMenu)}</button>
-        </div>` : `
-        <ul class="cartlist">
-          ${lines.map(({ dish, qty }) => `
-            <li class="cartlist__row">
-              ${dish.image ? `<img src="assets/dishes/${dish.image}-400.webp" alt=""
-                    loading="lazy" width="64" height="64">` : '<span class="cartlist__ph"></span>'}
-              <div class="cartlist__txt">
-                <span class="cartlist__name">${esc(L(dish.name))}</span>
-                <span class="cartlist__price">${dish.price != null
-                  ? `${dish.price * qty} ${esc(ui.currencyShort)}`
-                  : esc(L(dish.priceNote) || ui.priceOnRequest)}</span>
-              </div>
-              <div class="stepper" role="group" aria-label="${esc(ui.qty)}">
-                <button type="button" data-cartstep="-1" data-id="${dish.id}"
-                        aria-label="${esc(ui.decrease)}">−</button>
-                <output>${qty}</output>
-                <button type="button" data-cartstep="1" data-id="${dish.id}"
-                        aria-label="${esc(ui.increase)}">+</button>
-              </div>
-            </li>`).join('')}
-        </ul>
-
-        <label class="cartnote">
-          <span>${esc(ui.noteLabel)}</span>
-          <textarea id="cartNote" rows="2" placeholder="${esc(ui.notePlaceholder)}">${esc(state.note)}</textarea>
-        </label>
-
-        <div class="carttotal">
-          <span>${esc(ui.total)}</span>
-          <strong>${total > 0 ? `${total} ${esc(ui.currencyShort)}` : '—'}</strong>
-        </div>
-        ${onRequest > 0 ? `<p class="carttotal__note">+ ${esc(ui.onRequestNote(onRequest))}</p>` : ''}
-
-        <p class="sheet__hint">${esc(ui.waFillHint)}</p>
-
-        <div class="sheet__actions">
-          <a class="btn btn--wa" id="cartSend" href="${waLink()}" target="_blank" rel="noopener">
-            ${ICON_WA}<span>${esc(ui.sendOrder)}</span></a>
-          <button type="button" class="btn btn--ghost" id="cartClear">${esc(ui.clearCart)}</button>
-        </div>`}
-    </div>`;
-}
-
-function openCart() {
-  const dlg = $('#cart');
-  if (!dlg.open) dlg.showModal();
-  renderCartSheet();
-  $('#cartClose')?.focus();
-}
-
 function closeDish() {
   state.openDish = null;
   const dlg = $('#dish');
@@ -445,7 +217,7 @@ function setLang(code) {
   if (!LANGS[code] || code === state.lang) return;
   const y = window.scrollY;
   state.lang = code;
-  localStorage.setItem(STORE_KEY, code);
+  storeLang(code);
   applyLangAttrs();
   renderChrome();
   renderGrid();
@@ -525,80 +297,14 @@ function bind() {
   });
   dlg.addEventListener('close', () => { state.openDish = null; });
 
-  // شريط السلة الثابت
-  $('#cartBar').addEventListener('click', e => {
-    if (!e.target.closest('#cartCta')) return;
-    if (cartCount() === 0) {
-      // السلة فارغة: لا نفتح واتساب. نأخذه إلى الأطباق ونشرح السبب.
-      document.getElementById('menu').scrollIntoView({ block: 'start' });
-      toast(t().cartEmptyHint);
-      return;
-    }
-    openCart();
-  });
-
-  const cart = $('#cart');
-  cart.addEventListener('click', e => {
-    if (e.target.closest('#cartClose') || e.target === cart) return cart.close();
-    if (e.target.closest('#cartBrowse')) {
-      cart.close();
-      document.getElementById('menu').scrollIntoView({ block: 'start' });
-      return;
-    }
-    if (e.target.closest('#cartClear')) {
-      state.cart = {}; state.note = ''; saveCart();
-      renderCartBar(); renderCartSheet(); syncCardBadges();
-      return;
-    }
-    const step = e.target.closest('[data-cartstep]');
-    if (step) {
-      const id = step.dataset.id;
-      setQty(id, (state.cart[id] || 0) + Number(step.dataset.cartstep));
-      return;
-    }
-    // زر الإرسال: نحدّث الرابط لحظة النقر حتى يحمل آخر حالة للسلة والملاحظة
-    const send = e.target.closest('#cartSend');
-    if (send) send.href = waLink();
-  });
   $('#shareBtn').addEventListener('click', shareMenu);
 
-  cart.addEventListener('input', e => {
-    if (e.target.id === 'cartNote') {
-      state.note = e.target.value; saveCart();
-      const send = $('#cartSend');            // أبقِ الرابط مطابقاً للملاحظة لحظةً بلحظة
-      if (send) send.href = waLink();
-    }
-  });
 
 }
 
 /* ------------------------------------------------------------ المشاركة */
 
-/** يشارك رابط القائمة عبر ورقة المشاركة الأصلية للنظام، ويسقط إلى
-    نسخ الرابط عندما لا تتوفر (أغلب متصفحات سطح المكتب).
-    الرابط المُشارَك هو العنوان الرسمي دائماً لا عنوان التبويب الحالي،
-    حتى لا تُشارَك روابط تحمل معاملات بحث أو مرساة قسم. */
-async function shareMenu() {
-  const ui = t();
-  const url = CONFIG.siteUrl + '/';
-
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: ui.shareTitle, text: ui.shareText, url });
-      return;
-    } catch (err) {
-      if (err.name === 'AbortError') return;   // ألغى المستخدم المشاركة
-      /* غير ذلك: نكمل إلى النسخ */
-    }
-  }
-
-  try {
-    await navigator.clipboard.writeText(url);
-    toast(ui.linkCopied);
-  } catch {
-    toast(ui.linkCopyFailed);
-  }
-}
+const shareMenu = () => shareLink(CONFIG.siteUrl + '/', toast);
 
 /** وميض قصير يؤكد الإضافة بصرياً. */
 function flash(el) {
@@ -627,19 +333,20 @@ async function boot() {
   state.lang = readLang();
   applyLangAttrs();
 
-  const [menu, lqip] = await Promise.all([
-    fetch('data/menu.json').then(r => r.json()),
-    fetch('assets/dishes/manifest.json').then(r => r.json()).catch(() => ({})),
-  ]);
-
-  state.menu = menu;
-  state.lqip = Object.fromEntries(Object.entries(lqip).map(([k, v]) => [k, v.lqip]));
+  await loadMenu();
 
   loadCart();
   renderChrome();
   renderGrid();
-  renderCartBar();
   bind();
+
+  // السلة الفارغة لا تفتح واتساب — تأخذ الزبون إلى الأطباق وتشرح السبب
+  mountCart({ onBrowse: () => {
+    $('#menu').scrollIntoView({ block: 'start' });
+    toast(t().cartEmptyHint);
+  }});
+  // شارات البطاقات خاصة بهذه الواجهة، فتُحدَّث هنا لا في الوحدة المشتركة
+  onCartChange(syncCardBadges);
 }
 
 /* التخزين المؤقت للعمل بلا إنترنت. يُسجَّل بعد اكتمال التحميل حتى لا

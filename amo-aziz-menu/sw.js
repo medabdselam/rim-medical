@@ -15,7 +15,7 @@
    ثم انسخ القيمة نفسها إلى VERSION أدناه.
    ========================================================= */
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL = `amoaziz-shell-${VERSION}`;
 const MEDIA = `amoaziz-media-${VERSION}`;
 const DATA  = `amoaziz-data-${VERSION}`;
@@ -26,9 +26,15 @@ const DATA  = `amoaziz-data-${VERSION}`;
 const SHELL_URLS = [
   './',
   'index.html',
+  'catalog/',
+  'catalog/index.html',
+  'catalog/catalog.css',
+  'catalog/catalog.js',
   'css/styles.css',
   'css/fonts.css',
   'js/app.js',
+  'js/core.js',
+  'js/cart-ui.js',
   'js/i18n.js',
   'js/config.js',
   'manifest.webmanifest',
@@ -88,10 +94,13 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== self.location.origin) return;
 
   if (request.mode === 'navigate') {
+    // بلا إنترنت: نُرجع الصفحة المطلوبة نفسها لا الرئيسية دائماً،
+    // وإلا وجد من حفظ رابط الكتالوج الواجهة الكاملة مكانه.
+    const fallback = url.pathname.includes('/catalog') ? 'catalog/index.html' : 'index.html';
     e.respondWith(
       fetch(request)
         .then((res) => cachePut(SHELL, request, res))
-        .catch(() => caches.match('index.html').then((r) => r || caches.match('./')))
+        .catch(() => caches.match(fallback).then((r) => r || caches.match('./')))
     );
     return;
   }

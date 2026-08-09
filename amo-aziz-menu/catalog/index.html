@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>قائمة مطعم عمو عزيز — الأسعار والطلب عبر واتساب</title>
+<meta name="description" content="كل أصناف مطعم عمو عزيز وأسعارها في صفحة واحدة سريعة: مناقيش ومخبوزات، أطباق رئيسية، وبيتزا. اختر واطلب عبر واتساب.">
+<meta name="theme-color" content="#101215">
+<link rel="canonical" href="https://medabdselam.github.io/amo-azuz-menu/catalog/">
+
+<!-- معاينة الرابط. هذه هي الصفحة المخصّصة للمشاركة، فوصفها يركّز على
+     ما يريده من يفتح الرابط من واتساب: الأسعار والطلب فوراً. -->
+<meta property="og:type" content="restaurant.menu">
+<meta property="og:site_name" content="مطعم عمو عزيز">
+<meta property="og:url" content="https://medabdselam.github.io/amo-azuz-menu/catalog/">
+<meta property="og:title" content="قائمة مطعم عمو عزيز — كل الأصناف والأسعار">
+<meta property="og:description" content="تصفّح القائمة كاملة بالأسعار، أضف ما تريد، وأرسل طلبك عبر واتساب في رسالة واحدة.">
+<meta property="og:image" content="https://medabdselam.github.io/amo-azuz-menu/assets/brand/share-card-1200x630.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="مطعم عمو عزيز — قائمة الطعام">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="قائمة مطعم عمو عزيز — كل الأصناف والأسعار">
+<meta name="twitter:description" content="تصفّح القائمة كاملة بالأسعار، أضف ما تريد، وأرسل طلبك عبر واتساب في رسالة واحدة.">
+<meta name="twitter:image" content="https://medabdselam.github.io/amo-azuz-menu/assets/brand/share-card-1200x630.jpg">
+<meta name="twitter:image:alt" content="مطعم عمو عزيز — قائمة الطعام">
+
+<link rel="icon" href="../assets/brand/app-icon-180.png">
+<link rel="apple-touch-icon" href="../assets/brand/app-icon-180.png">
+<link rel="manifest" href="../manifest.webmanifest">
+
+<link rel="preload" href="../assets/fonts/plexar-arabic-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/plexar-arabic-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/fonts.css">
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="catalog.css">
+</head>
+
+<body class="cat-page">
+<a class="skip" href="#cats">تخطَّ إلى الأقسام</a>
+
+<!-- لا صورة واجهة ولا سيرة شيف هنا: من يفتح الرابط من واتساب يريد
+     الأسعار في الثانية الأولى، لا جولة تعريفية. -->
+<header class="cbar">
+  <div class="wrap cbar__in">
+    <a class="cbar__brand" href="../">
+      <img src="../assets/brand/logo-mark-light-256.png" alt="" width="34" height="18">
+      <span id="brandName">مطعم عمو عزيز</span>
+    </a>
+    <nav class="langs" id="langs" aria-label="اللغة"></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="ctag" id="tagline"></p>
+
+  <nav class="cchips" id="cats" aria-label="الأقسام"></nav>
+
+  <div id="list"></div>
+
+  <div class="cfoot">
+    <button type="button" class="btn btn--ghost" id="shareBtn"></button>
+    <a class="btn btn--ghost" href="../" id="fullSite"></a>
+  </div>
+</main>
+
+<div class="orderbar" id="cartBar"></div>
+<dialog class="modal sheet" id="cart" aria-label="سلة الطلب"></dialog>
+
+<script type="module" src="catalog.js"></script>
+</body>
+</html>

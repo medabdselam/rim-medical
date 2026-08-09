@@ -104,6 +104,21 @@ for (const [re, value] of ABSOLUTE) {
   html = html.replace(re, `$1${value}$2`);
 }
 
+/* الكتالوج يحمل الوسوم نفسها لكن بعنوانه هو */
+const catPath = join(root, 'catalog/index.html');
+let cat = await readFile(catPath, 'utf8');
+const CAT_ABSOLUTE = [
+  [/(<link rel="canonical" href=")[^"]*(")/, `${base}/catalog/`],
+  [/(<meta property="og:url" content=")[^"]*(")/, `${base}/catalog/`],
+  [/(<meta property="og:image" content=")[^"]*(")/, `${base}/${CONFIG.shareImage}`],
+  [/(<meta name="twitter:image" content=")[^"]*(")/, `${base}/${CONFIG.shareImage}`],
+];
+for (const [re, value] of CAT_ABSOLUTE) {
+  if (!re.test(cat)) throw new Error(`وسم مفقود في catalog/index.html: ${re}`);
+  cat = cat.replace(re, `$1${value}$2`);
+}
+await writeFile(catPath, cat);
+
 const robotsPath = join(root, 'robots.txt');
 const robots = await readFile(robotsPath, 'utf8');
 await writeFile(robotsPath, robots.replace(/^Sitemap: .*$/m, `Sitemap: ${base}/sitemap.xml`));
@@ -125,7 +140,9 @@ await writeFile(htmlPath, `${head}${marker}\n${block}\n${html.slice(j)}`);
 
 const today = new Date().toISOString().slice(0, 10);
 
-/* صفحة واحدة فقط — القائمة كلها تُعرض في مستند واحد */
+/* صفحتان تعرضان القائمة نفسها بتخطيطين. الواجهة الكاملة هي الأصل،
+   والكتالوج نسخة مختصرة للمشاركة — لذلك أولويته أقل. كلاهما يحمل
+   canonical خاصاً به فلا يُعدّان محتوى مكرّراً. */
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -133,6 +150,12 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>${base}/catalog/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
 `;

@@ -63,6 +63,8 @@ export const UI = {
     waAddress: 'العنوان:',
     waFillHint: 'أكمل الاسم والعنوان في واتساب قبل الإرسال.',
 
+    fullSite: 'الموقع الكامل',
+    quickCatalog: 'عرض سريع للأسعار',
     share: 'شارك القائمة',
     shareTitle: 'مطعم عمو عزيز — قائمة الطعام',
     shareText: 'قائمة مطعم عمو عزيز: مناقيش ومخبوزات، أطباق رئيسية، وبيتزا. الطلب عبر واتساب.',
@@ -117,6 +119,8 @@ export const UI = {
     waAddress: 'Adresse :',
     waFillHint: 'Complétez le nom et l’adresse dans WhatsApp avant d’envoyer.',
 
+    fullSite: 'Site complet',
+    quickCatalog: 'Vue rapide des prix',
     share: 'Partager le menu',
     shareTitle: 'Restaurant Amo Aziz — Menu',
     shareText: 'Le menu du Restaurant Amo Aziz : manakich, plats principaux et pizzas. Commande sur WhatsApp.',
@@ -171,6 +175,8 @@ export const UI = {
     waAddress: 'Address:',
     waFillHint: 'Fill in your name and address in WhatsApp before sending.',
 
+    fullSite: 'Full site',
+    quickCatalog: 'Quick price view',
     share: 'Share the menu',
     shareTitle: 'Amo Aziz Restaurant — Menu',
     shareText: 'The Amo Aziz Restaurant menu: manakish, main dishes and pizza. Order on WhatsApp.',
