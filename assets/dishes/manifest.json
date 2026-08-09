@@ -1,0 +1,182 @@
+{
+ "toshka": {
+  "page": 2,
+  "lqip": "data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAAAQBQCdASoUABQAPu1gq1AppSOisBgIATAdiWIAnTMOgUdteRQW3CGZqTjUR3EvQ75gAPzZCkqY33zUa5Brp8sz4M8196MPIXRXWuHG7MjMqlhdYo0FNuJqkH1+rEaGxDSU5gFksG0Maas8PdZJpPIeJHYkGu6tITwdxAAA",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "falafel-halabi": {
+  "page": 3,
+  "lqip": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAACwBACdASoUABQAPu1srVIppaQiqAgBMB2JQBOgAPTvyt4v5pLRdiDyy9onJOHgAMoWPDTt9hz4A6PHn58XeFoMYAvqSq64I9waBP27gP+/VmuF6V15M25QVPOiOayVmGdKP45DuqQubrktdHeCwLnwBULJQhAriAA=",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "manakish-zaatar": {
+  "page": 4,
+  "lqip": "data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAADwBACdASoUABQAPu1oqk8ppiOiKA1RMB2JQBdgAb8euYH1w74cDpzrLXL1BeFbQsAA/phBLE+eBdyoWj7JZsJQlkYmn4ak75xlpEG8/H/RxjTVisN8kdFH+KAneaGhTHWwTk+uvANqt7q8bMM3aKCrZ1XvpQAA",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "rice-bukhari": {
+  "page": 5,
+  "lqip": "data:image/webp;base64,UklGRp4AAABXRUJQVlA4IJIAAACQBQCdASoUABQAPu1sqlGppaOiqAqpMB2JbACdMoR+AA/6Rr/35nwGvG0ioKfraL3UGRDQAADMVGdSOHOTLs2ueYP0xLVGZAKrUK6mo04Z2hViyuVh09BnANNuVJxL8ZiW2xc6y21zYTSqFkX4nK+EglLBKJ4Yru/NBVztnZ2+QXx1ojy2ADda1NqJUg0d1BBAAA==",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "fatira-meat-chicken": {
+  "page": 6,
+  "lqip": "data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAAAQBQCdASoUABQAPu1qrFEppaQiqAqpMB2JYgB3hAF7tl1OQ8jidUcuYB6bMba4ShAAAMtGmn8at9pIR0LTJHimEzr6RW4tjoHH9IdSwF/+p7TfWvYJUE0zHoXzHQEclOUvV1racnFOv3lmGNdO0AFXp40iHfsAAAA=",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "pizza": {
+  "page": 7,
+  "lqip": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAABwBACdASoUABQAPu1iq1AppSOisBgIATAdiWgAnQAELtb8AeXWcPDHqpBVgAD+XzEV5m/sH9x0ec77BgTEsVyfUwSoTnv0fb7fN8cUOLEFqCyEzFMaUvFMy6R7ESwao3sCWuGVQ9srPu5bUkli1/GNXwrWNinxWOmChynQ8/m8SQAA",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "pizza-stuffed-crust": {
+  "page": 8,
+  "lqip": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABQBQCdASoUABQAPu1qr1CppaQiqAqpMB2JZgCdMoR0YBANFy9hcwXIcxPcWzR/3erbLAAA/phBLJIjC6mfUaZWEDhzxC6NvJMmK0rWzIvhNgV79Dx7KiRJMNnFDbQk3WYithhKWByzEIJvbhBOezWSTR9WyqnKeCYcBVPVddBgbItgAAA=",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "mansaf-mashawi": {
+  "page": 9,
+  "lqip": "data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAACwBACdASoUABQAPu1irE2ppaSiKA1RMB2JZgCxG2QAp7kr8SPTV6wczeNEY0VgAPfULtzPYH+suYxjBYD2WzX54pEZ7V5PSIQnjyUQUvrpWs4PL2KlOyLbUpIDtM/g1EdtxuTMiM2QYOo5q2rgNAAAAAA=",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "foul-halabi-a": {
+  "page": 10,
+  "lqip": "data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAABQBQCdASoUABQAPu1qrVCppaQiqAqpMB2JZgCxHuN+AA0rnJp2yErwpYwf866/QJrKAwAAziyKCyPP6/ztsIoviabM8Vr5pwW/4B0UYj8Idb1rHqxmtwlhS4LGg5BRjJYqXMjOGHaGyeuMnBXrrX5u2bB8WZr8oD98W8EU4SbDAAAA",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "kibbeh-mashwiya": {
+  "page": 11,
+  "lqip": "data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAABwBQCdASoUABQAPu1orVCppaQiqAqpMB2JZgCdMoR00BFrdelDDJFwLJL7JLcm5u1RqX4QAP6z9O0qWNG9SYxC47msI+zuPG6ZvtkzT03+qgxfEW2CsGihH2MdAaJZ+Y21Zou9ijdKQ9rld3xME5k0fxHjy9qsVlFDXIGAAAA=",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "sfiha-souriya": {
+  "page": 12,
+  "lqip": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAADwBACdASoUABQAPu1qr1CppaQiqAqpMB2JQBOmWqf/AgRhm12uGkWSiLkwY+Zy8PAA/NkKStmlOMTz2AeYGel6/NQUXbKDaciZvSY+w/ztz/s1PaE8w/Q5mg4f8whWWG4ms+TCjSv6JM5Rk/0YaeYXYYQ+RQF/oWWMerR4XAAAAA==",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "khubz-saj": {
+  "page": 13,
+  "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAAAwBQCdASoUABQAPu1ur1KppiQiqAgBMB2JQBOmZKiAAheVw7MqP0yFa3QScEbmqlguoAD82DOJbY9zn2P5P2wbicOoXGXvxkii5il6SchBwgclYoIR/68OzEuhvhopdVhH6jp14jywIb5MXZaQwoUdDcMrATGun+2JkbPFryYLAsXXZMPwAA==",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "falafel-sandwich": {
+  "page": 14,
+  "lqip": "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAAAwBQCdASoUABQAPu1ur1IppiQiqAgBMB2JQBOmWOg29rQhkW2UsInA8rqyEK3j9CJw1AD45Fyczz1MmxohevZOw6LxjH/AtZWp6lJYOrO32Gl6pUiTCLZ3J2YzFKRIxgS455dWQIUelxCxZk0l82CNbkQ48k1zW4TPju6r2FXtomnQAAA=",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "rice-bukhari-chicken": {
+  "page": 15,
+  "lqip": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAABwBQCdASoUABQAPu1or1AppaSiqAqpMB2JZgCdMoR8ON2A4K2Opp88rBxs4m8cnVtSjDI4APulKpF9Jw99I6hVGmKFf54NwkdW+/hQQuAQ1dKX1PUfS47KTarUQ4mvm7g4De1nwDFnL1vdzeQl57e24PEreOJedW95kbxxEhY7K0d0fCWgAA==",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "manakish-lahm": {
+  "page": 16,
+  "lqip": "data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAAAwBQCdASoUABQAPu1gq1AppKOisBgIATAdiWQAnTLjgpgO+MkgvG7j5Xulsmp9IJJpUAD31ucZfMur7qr+WS3U1pP+CRDJjzdOkc8/3VLq/ydR21bhIqt832/I1OYhkimHMJGeBKfm4cuYZ7YaOTnRlBwEBlW+Gj/AAA==",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "manakish-filfil": {
+  "page": 17,
+  "lqip": "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwBACdASoUABQAPu1mqk+ppaOiKA1RMB2JQBdmcmgpAWsQz61HlgliIeMso7zmeQAA4CGjsBWlGJVIUcTN95VMYPMVlkd7RJuv6SBJ5PnkEijYa+WBAzXMySaWPg/r9u647DHZWySshQMisSYOz9AA",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "manakish-jibn": {
+  "page": 18,
+  "lqip": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADQBACdASoUABQAPu1qqVAppaOiqA1RMB2JQBOmcdgkLUh+hcrzQgPiVj85KGCRAAD84crYjootONS6M/HVUuvskR7eOxIQjf35UOTcPrIuTjoXXDYEeehJVC8019PxTMsdMEwxbpOhosrxHYGE8Gfxd4AAAA==",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "rice-kabab-fries": {
+  "page": 19,
+  "lqip": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADwBACdASoUABQAPu1gq02ppaQiMBgMATAdiUAVhnHYLdW9cZDp3wE7QZbJnj3ARcwAzJQHTmx3WhZjQqczIMzJ2rixBzCzr753sasQm8F3Z9liIo9a6WqOcNp3vbfIxkCjrvO0G21Ki312Y66cgGGYJXF4AA==",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "foul-halabi-b": {
+  "page": 20,
+  "lqip": "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAADQBACdASoUABQAPu1wsFIppiSiqAgBMB2JYwC7My/BeniDm2LJ02N5kTCubLHgAAD33SqIzSuRyIddnlqQfTPaG+2JGtKk98FRl6gOPPnlhU0RjWZb8zLuhAHHbuqlVyfmh+zFyGKUiMnRIAA=",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ },
+ "fatira-kabab-halabi": {
+  "page": 21,
+  "lqip": "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAABQBQCdASoUABQAPu1oqk+ppiOiKA1RMB2JZACdMw5FABR/lGwJ/oRaRDaLCxnOwzX33OgA/dTsJOiWcMq0J4cHhuVsyUVV3kcoudH7N/tYMZ/gnW7n/MPV8516pojze6of9K6zDNLXhk5TOZxiIM0+YV/ROr9u0TL0p1UJTAAAAA==",
+  "widths": [
+   400,
+   800,
+   1200
+  ]
+ }
+}
