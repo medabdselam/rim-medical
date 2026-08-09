@@ -205,24 +205,24 @@
     },
     {
       "id": "kibbeh-mashwiya", "category": "bakery", "price": 50, "image": "kibbeh-mashwiya",
+      "priceNote": { "ar": "للطبق", "fr": "l'assiette", "en": "per plate" },
       "name": { "ar": "كبة مشوية حلبية", "fr": "Kebbé grillé d'Alep", "en": "Aleppo Grilled Kibbeh" },
       "desc": {
         "ar": "أقراص كبّة مشوية تُقدَّم مع الزيت وحبّ الرمان.",
         "fr": "Galettes de kebbé grillées, servies avec huile et grains de grenade.",
         "en": "Grilled kibbeh patties, served with oil and pomegranate seeds."
       },
-      "priceUnitUnconfirmed": true,
       "source": "ملصق — كبه مشوية حلبية السعر 50 اوقيه جديده"
     },
     {
       "id": "sfiha-souriya", "category": "bakery", "price": 20, "image": "sfiha-souriya",
+      "priceNote": { "ar": "للحبة", "fr": "à l'unité", "en": "each" },
       "name": { "ar": "صفيحة سورية", "fr": "Sfiha syrienne", "en": "Syrian Sfiha" },
       "desc": {
         "ar": "أقراص عجين صغيرة مغطّاة باللحم المفروم المتبّل.",
         "fr": "Petites galettes de pâte garnies de viande hachée épicée.",
         "en": "Small dough rounds topped with seasoned minced meat."
       },
-      "priceUnitUnconfirmed": true,
       "source": "ملصق — صفيحة سوريه سعر 20 اوقيه جديده"
     },
     {
@@ -239,13 +239,13 @@
     },
     {
       "id": "falafel-halabi", "category": "bakery", "price": 10, "image": "falafel-halabi",
+      "priceNote": { "ar": "للحبة", "fr": "à l'unité", "en": "each" },
       "name": { "ar": "فلافل حلبية", "fr": "Falafel d'Alep", "en": "Aleppo Falafel" },
       "desc": {
         "ar": "أقراص فلافل مقرمشة بالسمسم، تُقدَّم مع مخلّل مقطّع.",
         "fr": "Falafels croustillants au sésame, servis avec des pickles coupés.",
         "en": "Crisp sesame-crusted falafel, served with chopped pickles."
       },
-      "priceUnitUnconfirmed": true,
       "source": "ملصق — فلافل حلبيه بسعر 10 اوقيه جديده"
     }
   ]
