@@ -4,8 +4,10 @@
        node tools/build-seo.mjs
 
    يقرأ data/menu.json و js/config.js ثم يكتب:
+     • الروابط المطلقة في index.html (canonical و og:url و og:image
+       و twitter:image) — مصدرها الوحيد CONFIG.siteUrl
      • كتلة Schema.org داخل index.html (بين علامتَي SEO:START و SEO:END)
-     • sitemap.xml
+     • sitemap.xml و سطر Sitemap في robots.txt
 
    لماذا مولِّد بدل التوليد لحظة التشغيل؟ لأن الزاحفات ومعاينات
    واتساب لا تنفّذ JavaScript، ولأن المشروع بلا خطوة بناء: الملفات
@@ -83,7 +85,31 @@ const schema = {
 const block = `<script type="application/ld+json">\n${JSON.stringify(schema, null, 2)}\n</script>`;
 
 const htmlPath = join(root, 'index.html');
-const html = await readFile(htmlPath, 'utf8');
+let html = await readFile(htmlPath, 'utf8');
+
+/* ---------------------------------------- الروابط المطلقة ---- */
+
+/* الزاحفات ومعاينات واتساب لا تحلّ المسارات النسبية، فلا مفرّ من
+   كتابة الرابط كاملاً داخل الوسوم. ولأن تكراره في أربعة مواضع هو
+   بالضبط ما يجعل نقل الموقع إلى نطاق آخر يكسر المعاينة، تُكتب كلها
+   هنا انطلاقاً من CONFIG.siteUrl وحده. */
+const ABSOLUTE = [
+  [/(<link rel="canonical" href=")[^"]*(")/, `${base}/`],
+  [/(<meta property="og:url" content=")[^"]*(")/, `${base}/`],
+  [/(<meta property="og:image" content=")[^"]*(")/, `${base}/${CONFIG.shareImage}`],
+  [/(<meta name="twitter:image" content=")[^"]*(")/, `${base}/${CONFIG.shareImage}`],
+];
+for (const [re, value] of ABSOLUTE) {
+  if (!re.test(html)) throw new Error(`وسم مفقود في index.html: ${re}`);
+  html = html.replace(re, `$1${value}$2`);
+}
+
+const robotsPath = join(root, 'robots.txt');
+const robots = await readFile(robotsPath, 'utf8');
+await writeFile(robotsPath, robots.replace(/^Sitemap: .*$/m, `Sitemap: ${base}/sitemap.xml`));
+
+/* ---------------------------------------- كتلة Schema.org ---- */
+
 const START = '<!-- SEO:START';
 const END = '<!-- SEO:END -->';
 const i = html.indexOf(START);
@@ -112,5 +138,6 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
 `;
 await writeFile(join(root, 'sitemap.xml'), xml);
 
-console.log(`✔ index.html — كتلة Schema.org (${menu.dishes.length} صنفاً في ${menu.categories.length} أقسام)`);
-console.log('✔ sitemap.xml');
+console.log(`✔ index.html — الروابط المطلقة + Schema.org (${menu.dishes.length} صنفاً في ${menu.categories.length} أقسام)`);
+console.log('✔ robots.txt · sitemap.xml');
+console.log(`  العنوان المعتمد: ${base}/`);

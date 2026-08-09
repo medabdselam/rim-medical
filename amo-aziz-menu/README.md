@@ -46,7 +46,7 @@ python3 -m http.server 8000
 | أضيف ساعات العمل | املأ `openingHours` (حالياً `null` فلا يظهر القسم) |
 | أغيّر رقم الواتساب | عدّل `whatsapp` (بلا مفتاح دولة) |
 | أغيّر مفتاح الدولة | عدّل `countryCode` — في نفس الملف مع بقية أرقام التواصل |
-| أنقل الموقع إلى نطاق آخر | عدّل `siteUrl` في `js/config.js` ثم شغّل `node tools/build-seo.mjs` |
+| أنقل الموقع إلى نطاق آخر | عدّل `siteUrl` في `js/config.js` **فقط** ثم شغّل `node tools/build-seo.mjs` — يحدّث canonical و og:url و og:image و robots.txt و sitemap.xml معاً |
 
 ### إضافة صورة طبق جديد
 
