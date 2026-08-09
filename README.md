@@ -12,7 +12,6 @@ Static site, no server, no build step.
 ## التشغيل محلياً · Run locally
 
 ```bash
-cd amo-aziz-menu
 python3 -m http.server 8000
 # افتح  http://localhost:8000
 ```
@@ -99,7 +98,7 @@ assets/dishes/<اسم>-1200.webp
 ## البنية · Structure
 
 ```
-amo-aziz-menu/
+.
 ├─ index.html
 ├─ css/    styles.css · fonts.css
 ├─ js/     app.js · i18n.js          ← كل نصوص الواجهة في i18n.js
@@ -113,8 +112,11 @@ amo-aziz-menu/
 
 ## النشر · Deploy
 
-أي استضافة ملفات ثابتة تعمل بلا إعداد: GitHub Pages، Netlify، Vercel.
-ارفع محتوى المجلد كما هو. للـ QR Code: ولّد رمزاً يشير إلى رابط الموقع بعد النشر.
+**الموقع منشور تلقائياً على GitHub Pages.** كل دفعة إلى `main` تُعيد النشر خلال
+دقيقة تقريباً عبر `.github/workflows/deploy-pages.yml` — لا خطوات يدوية.
+
+يعمل أيضاً بلا تعديل على Netlify أو Vercel (اسحب المجلد وأفلته).
+للـ QR Code: ولّد رمزاً يشير إلى رابط الموقع بعد النشر واطبعه على الطاولات والواجهة.
 
 ---
 
