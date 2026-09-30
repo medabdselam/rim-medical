@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,41 +110,11 @@ section{padding:76px 0}
 /* =========================================================
    2) شاشة اختيار اللغة (أول زيارة)
    ========================================================= */
-#langGate{
-  position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
-  background:
-    radial-gradient(1000px 600px at 80% -10%,rgba(15,185,177,.25),transparent 60%),
-    radial-gradient(800px 500px at 10% 110%,rgba(201,162,75,.18),transparent 60%),
-    linear-gradient(150deg,#081e3a,#0a2647 55%,#123b6d);
-  opacity:1;visibility:visible;transition:opacity .5s var(--ease),visibility .5s;
-}
-#langGate.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.gate-card{text-align:center;padding:32px;animation:gateIn .8s var(--ease) both}
-@keyframes gateIn{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
-.gate-logo{
-  width:86px;height:86px;margin:0 auto 20px;border-radius:24px;
-  background:linear-gradient(145deg,var(--teal),var(--teal-dark));
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 18px 40px rgba(15,185,177,.35);
-}
-.gate-logo svg{width:48px;height:48px}
-.gate-card h1{color:#fff;font-size:clamp(1.5rem,4vw,2.1rem);font-weight:800;letter-spacing:.5px}
-.gate-card .gate-sub{color:rgba(255,255,255,.6);margin:6px 0 34px;font-size:.95rem}
-.gate-langs{display:flex;flex-direction:column;gap:14px;width:min(340px,80vw);margin-inline:auto}
-.gate-lang{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;
-  padding:15px 22px;border-radius:16px;color:#fff;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
-  backdrop-filter:blur(8px);font-size:1.05rem;font-weight:700;
-  transition:transform .3s var(--ease),background .3s,border-color .3s,box-shadow .3s;
-}
-.gate-lang .g-native{font-size:1.1rem}
-.gate-lang .g-hint{font-size:.78rem;font-weight:400;color:rgba(255,255,255,.55)}
-.gate-lang:hover{
-  transform:translateY(-3px);background:rgba(15,185,177,.22);
-  border-color:var(--teal);box-shadow:0 14px 32px rgba(0,0,0,.3);
-}
-.gate-foot{margin-top:30px;color:rgba(255,255,255,.35);font-size:.8rem;letter-spacing:2px}
+.language-hint{position:absolute;top:calc(100% + 14px);inset-inline-end:0;width:min(280px,calc(100vw - 32px));padding:16px;background:var(--navy);color:#fff;border:1px solid var(--teal);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.2);z-index:60;font-size:.85rem;line-height:1.6}
+.language-hint::before{content:"";position:absolute;bottom:100%;inset-inline-end:24px;border:8px solid transparent;border-bottom-color:var(--teal)}
+.language-hint[hidden]{display:none}
+.language-hint p{margin:0 0 6px}
+.language-hint button{color:#fff;background:var(--teal-dark);padding:6px 14px;border-radius:6px;margin-top:6px}
 
 /* =========================================================
    3) الترويسة (Header)
@@ -674,23 +644,6 @@ footer{
 </head>
 <body>
 
-<!-- ====== شاشة اختيار اللغة ====== -->
-<div id="langGate" aria-modal="true" role="dialog">
-  <div class="gate-card">
-    <div class="gate-logo" id="gateLogo">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
-    </div>
-    <h1>Rim Medical</h1>
-    <div class="gate-sub">اختر لغتك &nbsp;·&nbsp; Choisissez votre langue &nbsp;·&nbsp; Choose your language</div>
-    <div class="gate-langs">
-      <button class="gate-lang" data-lang="ar"><span class="g-native">العربية</span><span class="g-hint">Arabic</span></button>
-      <button class="gate-lang" data-lang="fr"><span class="g-native">Français</span><span class="g-hint">French</span></button>
-      <button class="gate-lang" data-lang="en"><span class="g-native">English</span><span class="g-hint">English</span></button>
-    </div>
-    <div class="gate-foot">MEDICAL EQUIPMENT &amp; SUPPLIES</div>
-  </div>
-</div>
-
 <!-- ====== الترويسة ====== -->
 <header id="header">
   <div class="container nav-wrap">
@@ -711,13 +664,18 @@ footer{
     <div class="header-actions">
       <button class="theme-toggle" id="themeToggle" aria-label="Dark mode">🌙</button>
       <div class="lang-switch" id="langSwitch">
-        <button class="lang-btn" id="langBtn" aria-haspopup="true">
-          <span>🌐</span><span id="langCurrent">العربية</span><span style="font-size:.7rem">▾</span>
+        <button class="lang-btn" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-controls="languageMenu">
+          <span>🌐</span><span id="langCurrent">English</span><span style="font-size:.7rem">▾</span>
         </button>
-        <div class="lang-menu">
+        <div class="lang-menu" id="languageMenu">
           <button data-lang="ar">العربية <span>🇲🇷</span></button>
           <button data-lang="fr">Français <span>🇫🇷</span></button>
           <button data-lang="en">English <span>🇬🇧</span></button>
+        </div>
+        <div class="language-hint" id="languageHint" role="status" hidden>
+          <p>🌐 Change your language here.</p>
+          <p lang="ar" dir="rtl">يمكنك تغيير اللغة من هنا: العربية، الفرنسية أو الإنجليزية.</p>
+          <button type="button" id="dismissLanguageHint">Got it / فهمت</button>
         </div>
       </div>
       <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -1240,7 +1198,7 @@ const I18N = {
    ========================================================= */
 const LANG_KEY = "rim_medical_lang";
 let DATA = RimStore.getData();
-let currentLang = localStorage.getItem(LANG_KEY) || "ar";
+let currentLang = "en";
 let currentFilter = "all";
 
 const $ = (s, ctx) => (ctx || document).querySelector(s);
@@ -1261,24 +1219,22 @@ const productImages = (p) => (Array.isArray(p.images) && p.images.length)
 /* =========================================================
    شاشة اختيار اللغة (أول زيارة فقط)
    ========================================================= */
-const gate = $("#langGate");
-if (localStorage.getItem(LANG_KEY)) {
-  gate.classList.add("hidden");
-}
-$$(".gate-lang").forEach(btn => {
-  btn.addEventListener("click", () => {
-    setLang(btn.dataset.lang);
-    gate.classList.add("hidden");
-  });
-});
+const LANGUAGE_HINT_KEY = "rim_medical_language_hint_seen";
+const languageHint = $("#languageHint");
+try {
+  languageHint.hidden = localStorage.getItem(LANGUAGE_HINT_KEY) === "1";
+  localStorage.setItem(LANGUAGE_HINT_KEY, "1");
+} catch (e) { languageHint.hidden = false; }
+function dismissLanguageHint() { languageHint.hidden = true; }
+$("#dismissLanguageHint").addEventListener("click", dismissLanguageHint);
 
 /* =========================================================
    تطبيق اللغة على الصفحة
    ========================================================= */
 function setLang(lang) {
-  if (!I18N[lang]) lang = "ar";
+  if (!I18N[lang]) lang = "en";
   currentLang = lang;
-  localStorage.setItem(LANG_KEY, lang);
+  try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
   document.documentElement.lang = lang;
   document.documentElement.dir = I18N[lang].dir;
   $("#langCurrent").textContent = I18N[lang].label;
@@ -1488,11 +1444,20 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLight
 const langSwitch = $("#langSwitch");
 $("#langBtn").addEventListener("click", (e) => {
   e.stopPropagation();
-  langSwitch.classList.toggle("open");
+  dismissLanguageHint();
+  const isOpen = langSwitch.classList.toggle("open");
+  $("#langBtn").setAttribute("aria-expanded", String(isOpen));
 });
-document.addEventListener("click", () => langSwitch.classList.remove("open"));
+function closeLanguageMenu() {
+  langSwitch.classList.remove("open");
+  $("#langBtn").setAttribute("aria-expanded", "false");
+}
+document.addEventListener("click", closeLanguageMenu);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { closeLanguageMenu(); dismissLanguageHint(); }
+});
 $$(".lang-menu button").forEach(b => {
-  b.addEventListener("click", () => { setLang(b.dataset.lang); langSwitch.classList.remove("open"); });
+  b.addEventListener("click", () => { setLang(b.dataset.lang); closeLanguageMenu(); });
 });
 
 const mainNav = $("#mainNav");
